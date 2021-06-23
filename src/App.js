@@ -28,6 +28,13 @@ class App extends Component{
     })
   }
 
+  handelLogout = () => {
+    this.setState({
+      loggedInStatus: "NOT_LOGGED_IN",
+      user: {},
+    })
+  }
+
 checkLoginStatus(){
   axios.get('http://localhost:3000/logged_in', {withCredentials: true})
   .then(resp =>{
@@ -48,6 +55,12 @@ checkLoginStatus(){
   })
 }
 
+welcomer = () => {
+  if(this.state.user){
+    return <h2>{this.state.user.username}</h2>
+  }
+}
+
 
 
   render(){
@@ -55,8 +68,9 @@ checkLoginStatus(){
       <div className="App">
         <h1>Fish In Sight</h1>
         <BrowserRouter>
+        {this.welcomer()}
         <Switch>
-          <Route exact path={"/"} component={() => <Home handelLogin={this.handelLogin} getCSRFToken={this.getCSRFToken} />}  />
+          <Route exact path={"/"} component={() => <Home handelLogin={this.handelLogin} getCSRFToken={this.getCSRFToken} handelLogout={this.handelLogout} />}  />
           <Route exact path={"/dashboard"} component={() => <DashboardContainer loggedInStatus={this.state.loggedInStatus} /> } />
           
         </Switch>

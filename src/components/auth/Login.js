@@ -9,8 +9,12 @@ class Login extends Component {
         loginErrors: "",
     }
 
+    getCSRFToken = () => {
+        return unescape(document.cookie.split('=')[1])
+      }
+
     componentDidMount(){
-        console.log(this.props)
+        console.log("Log in Mounted",this.props.getCSRFToken())
     }
 
     
@@ -35,12 +39,13 @@ class Login extends Component {
             console.log("Login error", error)
         });
         */
+       console.log("Logging In fetch",this.props.getCSRFToken())
 
         const configObject = {
             method: "POST",
             credentials: 'include',
             headers: {
-                'X-CSRF-Token': this.props.getCSRFToken,
+                'X-CSRF-Token': this.getCSRFToken(),
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
@@ -51,6 +56,7 @@ class Login extends Component {
             }
         })
         }
+
         fetch("http://localhost:3000/sessions", configObject)
         .then(resp => resp.json())
         .then(resp => {
