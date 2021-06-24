@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import axios from 'axios';
+//import axios from 'axios';
 
 class Registration extends Component {
     state = {
@@ -21,20 +21,38 @@ class Registration extends Component {
             password_confirmation,
         } = this.state
 
-        axios.post("http://localhost:3000/registrations", {
-            user: {
-                email: email,
-                username: username,
-                password: password,
-                password_confirmation: password_confirmation,
+        const configObject = {
+            method: "POST",
+            credentials: 'include',
+            headers: {
+                'X-CSRF-Token': this.props.getCSRFToken(),
+                'Content-Type': 'application/json'
             },
-        }, 
-        { withCredintials: true }
-        ).then(resp => {
+            body: JSON.stringify({
+                user: {
+                    email: email,
+                    username: username,
+                    password: password,
+                    password_confirmation: password_confirmation,
+                }
+            })
+        }
+
+        fetch("http://localhost:3000/registrations", configObject)
+        .then(resp => resp.json())
+        .then(resp => {
             console.log("registration res", resp);
         }).catch(error =>{
             console.log("registration error", error)
         });
+
+        this.setState({
+            username: "",
+            password: "",
+            password_confirmation: "",
+            email: "",
+            registrationErrors: "",
+        })
 
     }
 

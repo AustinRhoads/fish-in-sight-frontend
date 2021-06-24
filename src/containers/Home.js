@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import Registration from '../components/auth/Registration'
 import Login from '../components/auth/Login'
 import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux'
+
 
 
 class Home extends Component {
@@ -12,17 +14,15 @@ class Home extends Component {
       }
 
     handelSuccessfulAuth = (data) => {
-        this.props.handelLogin(data);
-        this.props.history.push('/dashboard')
+        //this.props.handelLogin(data);
+       // this.props.history.push('/dashboard')
     }
 
     handelLogoutClick = () =>{
         
         fetch("http://localhost:3000/logout",{method: "DELETE", credentials: 'include', headers: {'X-CSRF-Token': this.getCSRFToken()}})
-        .then(resp => resp.json)
-        .then(this.props.handelLogout())
         .catch(error => console.log(error))
-        this.props.handelLogout()
+       // this.props.handelLogout()
         this.props.history.push('/')
         window.location.reload(false);
     }
@@ -30,15 +30,15 @@ class Home extends Component {
     render(){
         return(
             <div>
-
+                
             <button onClick={() => this.handelLogoutClick()}>Logout</button>
-            <Registration />
+            <Registration getCSRFToken={this.getCSRFToken} />
             
-            <Login handelSuccessfulAuth={this.handelSuccessfulAuth} getCSRFToken={this.getCSRFToken}/>
+            <Login userLogin={this.props.userLogin} getCSRFToken={this.getCSRFToken}/>
             </div>
         )
     }
 
 }
 
-export default withRouter(Home);
+export default connect() (withRouter(Home));
