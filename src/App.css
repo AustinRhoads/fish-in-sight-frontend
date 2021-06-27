@@ -23,3 +23,8 @@
 .nav-bar-container a{
     text-decoration: none;
 }
+hr.solid {
+    border-top: 3px solid #bbb;
+    width: 100px;
+    margin-left: 0px;
+  }

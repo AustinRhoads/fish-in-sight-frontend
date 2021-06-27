@@ -15,6 +15,9 @@ export default function userReducer (state= {user: {}, loggedInStatus: "NOT_LOGG
             return {...state, loading: true}
         case "SET_LOGIN_STATUS":
             return {...state, user: action.user, loggedInStatus: "LOGGED_IN", loading: false}
+        case "LOG_OUT":
+        console.log("LOGGING OUT OF THIS BIZ")
+        return {...state, user: {}, loggedInStatus: "NOT_LOGGED_IN", loading: false}
         default:
             return state;
     }

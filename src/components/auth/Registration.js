@@ -21,6 +21,15 @@ class Registration extends Component {
             password_confirmation,
         } = this.state
 
+        const newUser = {
+            user: {
+            email: email,
+            username: username,
+            password: password,
+            password_confirmation: password_confirmation,
+            }
+        }
+
         const configObject = {
             method: "POST",
             credentials: 'include',
@@ -28,14 +37,7 @@ class Registration extends Component {
                 'X-CSRF-Token': this.props.getCSRFToken(),
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({
-                user: {
-                    email: email,
-                    username: username,
-                    password: password,
-                    password_confirmation: password_confirmation,
-                }
-            })
+            body: JSON.stringify(newUser)
         }
 
         fetch("http://localhost:3000/registrations", configObject)
@@ -45,6 +47,9 @@ class Registration extends Component {
         }).catch(error =>{
             console.log("registration error", error)
         });
+
+        this.props.userRegister(newUser);
+        this.props.history.push('/dashboard');
 
         this.setState({
             username: "",
