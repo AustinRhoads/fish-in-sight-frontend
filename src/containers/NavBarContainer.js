@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+//import {NavLink} from 'react-router-dom';
 
 class NavBarContainer extends Component {
 
@@ -15,8 +16,8 @@ class NavBarContainer extends Component {
 
     renderUser = () => {
         if(this.props.loggedInStatus === "LOGGED_IN"){
-            return <><a href="/" className= "nav-link user-link">{this.props.user.username}</a>
-            <a href="/" className= "nav-link user-link" onClick={() => this.logout()}>Logout</a></>
+            return <><a href="/dashboard" className= "nav-link user-link right">{this.props.user.username}</a>
+            <a href="/" className= "nav-link user-link right" onClick={() => this.logout()}>Logout</a></>
         } else {
             return <><a href = "/" className= "nav-link">Login</a></>
         }
@@ -25,8 +26,9 @@ class NavBarContainer extends Component {
     render(){
         return(
             <div className="nav-bar-container">
+              
                 <a className= "nav-link" href = "/">FISH IN SIGHT</a> 
-                <a className= "nav-link" href = "/dashboard">Dashboard</a>
+                
                 {this.renderUser()}
             </div>
         )

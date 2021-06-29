@@ -22,11 +22,7 @@ class App extends Component{
   }
 
 
-welcomer = () => {
-  if(this.props.user){
-    return <h2>{this.props.user.username}</h2>
-  }
-}
+
 
 
 
@@ -36,10 +32,10 @@ welcomer = () => {
         
         <NavBarContainer user={this.props.user} loggedInStatus={this.props.loggedInStatus} userLogout={this.props.userLogout} />
         <BrowserRouter>
-        {this.welcomer()}
+       
         <Switch>
           <Route exact path={"/"} component={() => <Home userLogin={this.props.userLogin}  getCSRFToken={this.getCSRFToken} />}  />
-          <Route exact path={"/dashboard"} component={() => <DashboardContainer loggedInStatus={this.props.loggedInStatus} /> } />
+          <Route exact path={"/dashboard"} component={() => <DashboardContainer loggedInStatus={this.props.loggedInStatus} user={this.props.user} /> } />
           
         </Switch>
         </BrowserRouter>

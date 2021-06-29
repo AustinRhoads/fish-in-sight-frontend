@@ -41,7 +41,14 @@ export function checkLogin(){
         axios.get('http://localhost:3000/logged_in', {withCredentials: true})
         .then(resp => {
             if(resp.data.logged_in === true){
-                dispatch({type: "SET_LOGIN_STATUS", user: resp.data.user})
+                
+                fetch(`http://localhost:3000/api/v1/users/${resp.data.user.id}`)
+                .then(resp => resp.json())
+                .then(obj => 
+                    dispatch({type: "SET_LOGIN_STATUS", user: obj})
+                    );
+               
+               
             }    
         }).catch(error => {
           console.log("check logged in error: ", error)
@@ -72,7 +79,9 @@ export function userLogout(){
 
 
 export function userRegister(newUser){
+
     return(dispatch) => {
+
         const configObject = {
             method: "POST",
             credentials: 'include',
@@ -83,6 +92,15 @@ export function userRegister(newUser){
             body: JSON.stringify(newUser)
         }
 
-    }
+        fetch("http://localhost:3000/registrations", configObject)
+        .then(resp => resp.json())
+        .then(resp => {
+            console.log("registration res", resp);
+        }).catch(error =>{
+            console.log("registration error", error)
+        });
+
+
+    }   
 }
 

@@ -19,12 +19,60 @@
     padding-left: 8px;
     border-right: 1px solid black;
 }
+.nav-link:hover{
+    border-bottom: 1px solid rgba(0,0,0,0.8);
+}
 
 .nav-bar-container a{
     text-decoration: none;
+}
+.right{
+    float: right;
 }
 hr.solid {
     border-top: 3px solid #bbb;
     width: 100px;
     margin-left: 0px;
+  }
+
+  .user-name{
+      font-size: 27px;
+  }
+
+  .new-catch-div{
+      margin: auto;
+      width: 700px;
+      height: 500;
+      color: papayawhip;
+      border: solid orange 1px;
+      background-image: url('/home/austin/projects/fish-in-sight/fish-in-sight-frontend/src/lures02.jpg');
+      background-size: cover;
+  }
+
+  .new-catch-form{
+      width: 500px;
+      margin: auto;
+      text-align: center;
+      align-content: center;
+      margin-bottom: 27px;
+    background-color: rgba(0,0,0,0.3);
+  }
+
+  .catches-list{
+    color: papayawhip;
+    margin: auto;
+      width: 900px;
+      height: 500;
+     
+    background-image: url('/home/austin/projects/fish-in-sight/fish-in-sight-frontend/src/carpingrass.jpg');
+    background-size: cover;
+  }
+  .catches-list li{
+    list-style-type: none;
+    margin-left: 100px;
+  }
+
+  .catch-box{
+      width: 60%;
+      background-color: rgba(0,0,0,0.2);
   }
