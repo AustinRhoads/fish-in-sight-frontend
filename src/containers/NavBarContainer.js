@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 class NavBarContainer extends Component {
 
     componentDidMount(){
-        console.log(this.props)
+       // console.log(this.props)
     }
 
     logout = () => {
@@ -37,7 +37,6 @@ class NavBarContainer extends Component {
 }
 
 const mapStateToProps = state => {
-    console.log(state)
     return{
         user: state.userStatus.user,
         loggedInStatus: state.userStatus.loggedInStatus,

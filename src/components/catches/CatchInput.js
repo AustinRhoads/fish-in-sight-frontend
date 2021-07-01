@@ -70,35 +70,6 @@ handleOnSubmit = (e) => {
 }
 
 componentDidMount(){
-    /*
-    fetch(`http://localhost:3000/api/v1/species`)
-    .then(resp => resp.json())
-    .then(ary => {
-        console.log(ary)
-        this.setState({
-            all_species: ary,
-        }) 
-    })
-
-    fetch(`http://localhost:3000/api/v1/baits`)
-    .then(resp => resp.json())
-    .then(ary => {
-        console.log(ary)
-        this.setState({
-            all_baits: ary,
-        }) 
-    })
-
-    fetch(`http://localhost:3000/api/v1/spots`)
-    .then(resp => resp.json())
-    .then(ary => {
-        console.log(ary)
-        this.setState({
-            all_spots: ary,
-        }) 
-    })
-    */
-    
 
     this.setState({
         user_id: this.props.uid,
@@ -127,7 +98,7 @@ renderSpotsOptions = () => {
     render(){
         return(
             <div className="new-catch-div">
-                <label>New Catch</label>
+                <h2>New Catch</h2>
                 <br />
                 <br />
                 <form className="new-catch-form" onSubmit={ e => this.handleOnSubmit(e)}>

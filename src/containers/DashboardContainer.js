@@ -1,10 +1,13 @@
 import React, { Component } from 'react'
 import User from '../components/users/User'
-//import {BrowserRouter, Switch, Route, Link, useParams, useRouteMatch} from 'react-router-dom'
 import CatchInput from '../components/catches/CatchInput'
 import BaitInput from '../components/baits/BaitInput'
-//import {BrowserRouter, Switch, Route} from 'react-router-dom'
 import Catches from '../components/catches/Catches'
+import SpotInput from '../components/spots/SpotInput'
+//import MapContainer from '../components/maps/MapContainer'
+import cuid from 'cuid'
+
+
 
 class DashboardContainer extends Component {
 
@@ -12,6 +15,7 @@ class DashboardContainer extends Component {
         catches: [],
         species: [],
         baits: [],
+        newSpotId: cuid(),
         spots: [],
     }
 
@@ -48,48 +52,44 @@ class DashboardContainer extends Component {
          fetch(`http://localhost:3000/api/v1/spots`)
          .then(resp => resp.json())
          .then(ary => {
-
-           this.setState({spots: ary})
+    
+           this.setState({spots: [...ary, {id: this.state.newSpotId, lat: 0, lng: 0}]})
          })
          
 
     }
 
     updateData = (key, newData) => {
-        console.log("hey hey hey here i am" , newData)
         this.setState({
                 [key]: [...this.state[key], newData],
             })
     }
+
+
     
     render(){
         
-        console.log(this.props)
+        
         return(
-            <div>
+            <div className="dashbaord-div">
                 
                 {this.renderUser()}
             <Catches catches={this.state.catches} />
+            <br/>
             <CatchInput uid = {this.props.user.id} baits={this.state.baits} species={this.state.species} spots={this.state.spots} updateCatches={(caught) => this.updateData("catches", caught)}/>
+            <br/>
             <BaitInput uid = {this.props.user.id} updateBait={(bait) => this.updateData("baits", bait)} />
+            <br/>
+            <SpotInput uid = {this.props.user.id} updateSpots={(spot) => this.updateData("spots", spot)} spots={this.state.spots}/>
+            <br/>
+           
+            <br/>
 
+            <div className="dashboard-footer"></div>
             </div>
         )
     }
 }
 
-/*
-const DashboardContainer = (props) =>{
-    
-    return(
-        
-     
-            <div>
-                <h3>Dis be the Dashboard!</h3>
-                <h2>Status: { this.props.loggedInStatus}</h2>
-            </div>
-        
-    )
-}
-*/
+
 export default DashboardContainer;
