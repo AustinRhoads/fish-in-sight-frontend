@@ -24,6 +24,7 @@ class DashboardContainer extends Component {
         this.setState({
             catches: this.props.user.catches,
         })
+        console.log(this.props.user.catches)
     }
 
     renderUser = () => {

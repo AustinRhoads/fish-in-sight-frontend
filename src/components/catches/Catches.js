@@ -7,7 +7,7 @@ class Catches extends Component{
     renderList = () => {
         
             if(this.props.catches && this.props.catches.length > 0){
-                return  this.props.catches.map(caught => <li key={cuid()} > {CatchBox(caught)} </li>)
+                return  this.props.catches.map(caught => <li key={cuid()} > <CatchBox caught={caught} /> </li>)
             } else {
                return <h3>No Catches Logged yet</h3>
             }

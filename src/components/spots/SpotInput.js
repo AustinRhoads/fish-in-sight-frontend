@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 //import {GoogleApiWrapper} from 'google-maps-react';
-import MapContainer from '../maps/MapContainer';
+import SpotsMapContainer from '../maps/SpotsMapContainer';
 import Geocode from "react-geocode";
 
 Geocode.setApiKey("AIzaSyDRKWLt8ylJe2kVLSnueiWtspn10ngk6iQ")
@@ -61,7 +61,12 @@ class SpotInput extends Component{
             this.props.updateSpots(obj)
         })
         .catch(error => {console.log(error)})
-        //this.props.updateSpots()
+        this.setState({
+            name: "",
+            address: "",
+            lat: 0,
+            lng: 0,
+        })
 
     }
 
@@ -90,7 +95,7 @@ class SpotInput extends Component{
                     <input type="text" name="name" onChange={this.handleOnChange} placeholder="what's this place called?" value={this.state.name} />
                     <br />
 
-                    <MapContainer uid = {this.props.uid}  spots={this.props.spots} updateLatLngAddress={this.updateLatLngAddress} />
+                    <SpotsMapContainer uid = {this.props.uid}  spots={this.props.spots} updateLatLngAddress={this.updateLatLngAddress} />
                     <input type="submit" value="New Spot" />
                 </form>
 

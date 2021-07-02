@@ -13,6 +13,7 @@ class CatchInput extends Component {
         species_id: 1, 
         bait_id: 1,
         spot_id: 1,
+        image: null,
         all_species: [],
         all_baits: [],
         all_spots: [],
@@ -30,8 +31,10 @@ getCSRFToken = () => {
 }
 
 handleOnSubmit = (e) => {
+    
 
     e.preventDefault();
+    /*
     const {
         user_id,
         species_id,
@@ -39,6 +42,7 @@ handleOnSubmit = (e) => {
         spot_id,
         notes,
     } = this.state
+
 
     const caught = {
         user_id,
@@ -66,6 +70,34 @@ handleOnSubmit = (e) => {
     }).catch(error =>{
         console.log("catches error", error)
     });
+    */
+   const formData = new FormData();
+   formData.append('user_id', this.state.user_id)
+   formData.append('species_id', this.state.species_id)
+   formData.append('bait_id', this.state.bait_id)
+   formData.append('spot_id', this.state.spot_id)
+   formData.append('notes', this.state.notes)
+   formData.append('image', this.state.image)
+
+   const configObject = {
+    method: "POST",
+    credentials: 'include',
+    headers: {
+        'X-CSRF-Token': this.getCSRFToken(),
+        //'Content-Type': 'application/json'
+    },
+    body: formData
+}
+
+   fetch("http://localhost:3000/api/v1/catches", configObject)
+   .then(resp => resp.json())
+   .then(resp => {
+       console.log("catches res", resp);
+       this.props.updateCatches(resp);
+   }).catch(error =>{
+       console.log("catches error", error)
+   });
+
 
 }
 
@@ -95,6 +127,14 @@ renderSpotsOptions = () => {
     
 }
 
+fileSelectHandler = (e) => {
+   this.setState({image: e.target.files[0]})
+}
+
+uploadHandler = () => {
+
+}
+
     render(){
         return(
             <div className="new-catch-div">
@@ -103,6 +143,10 @@ renderSpotsOptions = () => {
                 <br />
                 <form className="new-catch-form" onSubmit={ e => this.handleOnSubmit(e)}>
 
+                    <input type="file" accept="image/*" multiple={false} name="image" onChange={e => this.fileSelectHandler(e)}/>
+                    <button onClick={this.uploadHandler}>Uplaod</button>
+            <br />
+            <br/>
                     <label htmlFor="species">Species: </label>
 
                 <select name="species_id" value={this.state.species_id} onChange={(e) => this.handleOnChange(e)} placeholder="choose a species">

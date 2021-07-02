@@ -10,7 +10,7 @@ import cuid from 'cuid'
 
 //const AnyReactComponent = ({text}) => <div>{text}</div>;
 
-class MapContainer extends Component {
+class SpotsMapContainer extends Component {
     
 
     state = {
@@ -168,7 +168,7 @@ class MapContainer extends Component {
                         
                         {this.renderSpots()}
                         
-                        <SpotMarker id="new_spot" color="green" lat={this.state.newSpotLat} lng={this.state.newSpotLng}/>
+                        <SpotMarker id="new_spot" color="rgb(0,255,0,0.3)" lat={this.state.newSpotLat} lng={this.state.newSpotLng}/>
 
 
                     </GoogleMapReact>
@@ -183,7 +183,7 @@ class MapContainer extends Component {
 
 export default GoogleApiWrapper({
     apiKey: ("AIzaSyDRKWLt8ylJe2kVLSnueiWtspn10ngk6iQ")
-  })(MapContainer)
+  })(SpotsMapContainer)
 
 
   //30.450038869261256, -95.60371554143748 lake conroe
