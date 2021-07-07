@@ -24,13 +24,15 @@ class SpotsMapContainer extends Component {
         catches: [],
         newSpotLat: 0,
         newSpotLng: 0,
-        key: cuid(),
+        key: "",
        
     }
 
     componentDidMount(){
         this.setMyLocation()
+       
       }
+
 
 
       setMyLocation = () => {

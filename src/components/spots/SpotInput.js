@@ -57,8 +57,8 @@ class SpotInput extends Component{
         fetch('http://localhost:3000/api/v1/spots', configObject)
         .then(resp => resp.json())
         .then(obj => {
-            console.log(obj)
-            this.props.updateSpots(obj)
+            console.log("No spot update to local state ",obj)
+           /* this.props.updateSpots(obj) */
         })
         .catch(error => {console.log(error)})
         this.setState({

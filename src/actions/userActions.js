@@ -44,14 +44,17 @@ export function checkLogin(){
                 
                 fetch(`http://localhost:3000/api/v1/users/${resp.data.user.id}`)
                 .then(resp => resp.json())
-                .then(obj => 
+                .then(obj => {
+                    
                     dispatch({type: "SET_LOGIN_STATUS", user: obj})
-                    );
+                   // return true;
+                });
                
                
             }    
         }).catch(error => {
           console.log("check logged in error: ", error)
+         // return false
         })
     }
 }

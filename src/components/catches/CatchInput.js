@@ -1,11 +1,15 @@
 import cuid from 'cuid';
 import React, { Component } from 'react';
-
+import { connect } from 'react-redux'
+import EXIF from 'exif-js';
+/*
+import  { getSpecies } from '/home/austin/projects/fish-in-sight/fish-in-sight-frontend/src/actions/speciesActions.js';
+import  { getBaits } from "/home/austin/projects/fish-in-sight/fish-in-sight-frontend/src/actions/baitActions.js";
+import { getSpots } from "/home/austin/projects/fish-in-sight/fish-in-sight-frontend/src/actions/spotActions.js"
+*/
 
 
 class CatchInput extends Component {
-
-
 
     state = {
         user_id: "",
@@ -14,10 +18,9 @@ class CatchInput extends Component {
         bait_id: 1,
         spot_id: 1,
         image: null,
-        all_species: [],
-        all_baits: [],
-        all_spots: [],
+        image_preview: null,
     }
+
 
 handleOnChange = (e) =>{
     
@@ -25,6 +28,7 @@ handleOnChange = (e) =>{
         [e.target.name]: e.target.value
     })
 }
+
 
 getCSRFToken = () => {
     return unescape(document.cookie.split('=')[1])
@@ -34,43 +38,7 @@ handleOnSubmit = (e) => {
     
 
     e.preventDefault();
-    /*
-    const {
-        user_id,
-        species_id,
-        bait_id,
-        spot_id,
-        notes,
-    } = this.state
-
-
-    const caught = {
-        user_id,
-        species_id,
-        bait_id,
-        spot_id,
-        notes,
-    }
-    console.log(caught)
-    const configObject = {
-        method: "POST",
-        credentials: 'include',
-        headers: {
-            'X-CSRF-Token': this.getCSRFToken(),
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(caught)
-    }
-
-    fetch("http://localhost:3000/api/v1/catches", configObject)
-    .then(resp => resp.json())
-    .then(resp => {
-        console.log("catches res", resp);
-        this.props.updateCatches(resp);
-    }).catch(error =>{
-        console.log("catches error", error)
-    });
-    */
+    
    const formData = new FormData();
    formData.append('user_id', this.state.user_id)
    formData.append('species_id', this.state.species_id)
@@ -98,6 +66,15 @@ handleOnSubmit = (e) => {
        console.log("catches error", error)
    });
 
+   this.setState({
+    notes: "",
+    species_id: 1, 
+    bait_id: 1,
+    spot_id: 1,
+    image: null,
+    image_preview: null,
+   })
+
 
 }
 
@@ -106,6 +83,46 @@ componentDidMount(){
     this.setState({
         user_id: this.props.uid,
     })
+
+    //this.props.getBaits();
+    //this.props.getSpots();
+
+    /*
+    this.props.getBaits();
+    this.props.getSpots();
+    */
+
+
+    /*
+    fetch(`http://localhost:3000/api/v1/species`)
+    .then(resp => resp.json())
+    .then(ary => {
+
+      this.setState({species: ary});
+    })
+    */
+
+    /*
+
+    fetch(`http://localhost:3000/api/v1/baits`)
+    .then(resp => resp.json())
+    .then(ary => {
+       this.setState({baits: ary})
+    })
+
+    */
+
+    /*
+    
+    fetch(`http://localhost:3000/api/v1/spots`)
+    .then(resp => resp.json())
+    .then(ary => {
+
+     // this.setState({spots: [...ary, {id: this.state.newSpotId, lat: 0, lng: 0}]}) 
+      this.setState({spots: ary})
+    })
+    */
+    
 
 }
 
@@ -117,7 +134,7 @@ renderSpeciesOptions = () => {
 
 renderBaitsOptions = () => {
 
-    return this.props.baits.map(spec => <option key={cuid()} value = {spec.id}>{spec.name}</option>)
+    return this.props.baits.map(bait => <option key={cuid()} value = {bait.id}>{bait.name}</option>)
     
 }
 
@@ -127,12 +144,22 @@ renderSpotsOptions = () => {
     
 }
 
+
 fileSelectHandler = (e) => {
-   this.setState({image: e.target.files[0]})
+ EXIF.getData(e.target.files[0], function(){ 
+      const dataz =  EXIF.getAllTags(this);
+      console.log(dataz)
+    });
+ 
+   this.setState({image: e.target.files[0], image_preview: URL.createObjectURL(e.target.files[0])})
 }
 
-uploadHandler = () => {
-
+renderImagePreview = () => {
+    if(this.state.image_preview){
+        return(
+            <img alt="img-preview" className="catch-img-preview" src={this.state.image_preview}></img>
+        )
+    }
 }
 
     render(){
@@ -144,7 +171,8 @@ uploadHandler = () => {
                 <form className="new-catch-form" onSubmit={ e => this.handleOnSubmit(e)}>
 
                     <input type="file" accept="image/*" multiple={false} name="image" onChange={e => this.fileSelectHandler(e)}/>
-                    <button onClick={this.uploadHandler}>Uplaod</button>
+                    {this.renderImagePreview()}
+                 
             <br />
             <br/>
                     <label htmlFor="species">Species: </label>
@@ -186,4 +214,25 @@ uploadHandler = () => {
     }
 }
 
-export default CatchInput;
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        /*
+        getSpecies: () => dispatch(getSpecies()),
+        getBaits: () => dispatch(getBaits()),
+        getSpots: () => dispatch(getSpots()),
+        */
+    }
+}
+
+const mapStateToProps = state => {
+    
+    return {
+        species: state.species.all_species,
+        baits: state.baits.all_baits,
+        spots: state.spots.all_spots,
+    }
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps) (CatchInput);

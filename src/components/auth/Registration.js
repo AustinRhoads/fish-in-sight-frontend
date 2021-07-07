@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import {Redirect} from 'react-router-dom'
 //import axios from 'axios';
 
 class Registration extends Component {
@@ -43,13 +44,23 @@ class Registration extends Component {
         fetch("http://localhost:3000/registrations", configObject)
         .then(resp => resp.json())
         .then(resp => {
+            console.log(resp)
+            if(resp.status === "created"){
+                console.log(resp)
+                this.props.handelSuccessfulAuth(resp.user)
+              //  this.props.userLogin(resp.user)
+            }
             console.log("registration res", resp);
         }).catch(error =>{
             console.log("registration error", error)
         });
 
-        this.props.userRegister(newUser);
-        this.props.history.push('/dashboard');
+
+
+        this.props.userLogin(newUser)
+      ///////HHHEEERRREEE!!!!!!!!!!!!!
+        
+      
 
         this.setState({
             username: "",

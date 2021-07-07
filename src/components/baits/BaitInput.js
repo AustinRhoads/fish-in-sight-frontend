@@ -41,7 +41,7 @@ class BaitInput extends Component {
 
         fetch('http://localhost:3000/api/v1/baits', configObject)
         .then(resp => resp.json())
-        .then(obj => this.props.updateBait(obj))
+        .then(obj => /*this.props.updateBait(obj)*/ console.log("no bait update in local state", obj))
     }
 
     handleOnChange = (e) => {

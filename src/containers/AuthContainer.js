@@ -8,10 +8,10 @@ class AuthContainer extends Component {
         return(
             <div className="auth-div">
                 <p>LOGIN</p>
-                <Login userLogin={this.props.userLogin}  getCSRFToken={this.props.getCSRFToken} />
+                <Login userLogin={this.props.userLogin}  getCSRFToken={this.props.getCSRFToken} handelSuccessfulAuth={this.props.handelSuccessfulAuth} />
                 <hr className="solid"></hr>
                 <p>Not a member? Sign up.</p>
-                <Registration  getCSRFToken={this.props.getCSRFToken} />
+                <Registration userLogin={this.props.userLogin}  getCSRFToken={this.props.getCSRFToken} handelSuccessfulAuth={this.props.handelSuccessfulAuth} />
             </div>
         )
     }

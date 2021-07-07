@@ -28,3 +28,20 @@ export function newCatch (caught){
     }
 
 }
+
+export function getUserCatches (uid){
+    return (dispatch) => {
+        dispatch({type: "LOADING"})
+        fetch(`http://localhost:3000/api/v1/users/${uid}`)
+        .then(resp => resp.json())
+        .then(obj => {
+         
+            if(obj){
+              dispatch({type: "GET_USER_CATCHES", catches: obj.catches})
+            }
+            
+           
+        })
+
+    }
+}

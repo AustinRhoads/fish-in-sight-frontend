@@ -16,10 +16,10 @@ class NavBarContainer extends Component {
 
     renderUser = () => {
         if(this.props.loggedInStatus === "LOGGED_IN"){
-            return <><a href="/dashboard" className= "nav-link user-link right">{this.props.user.username}</a>
-            <a href="/" className= "nav-link user-link right" onClick={() => this.logout()}>Logout</a></>
+            return <><a href="/dashboard" className= "nav-link user-link right-1">{this.props.user.username}</a>
+            <a href="/" className= "nav-link user-link right-2" onClick={() => this.logout()}>Logout</a></>
         } else {
-            return <><a href = "/" className= "nav-link">Login</a></>
+            return <><a href = "/" className= "nav-link right-2">Login</a></>
         }
     }
 
@@ -27,9 +27,11 @@ class NavBarContainer extends Component {
         return(
             <div className="nav-bar-container">
               
-                <a className= "nav-link" href = "/">FISH IN SIGHT</a> 
+                <a className= "nav-link home-link" href = "/">FISH IN SIGHT</a> 
+                
                 
                 {this.renderUser()}
+                <h1 className="nav-center">FISH IN SIGHT</h1>
             </div>
         )
     }

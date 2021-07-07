@@ -6,6 +6,11 @@ import cuid from 'cuid'
 class User extends Component{
 
    // let name = this.props.user.username;
+   renderName = () => {
+    if(this.props.user.username){
+        return  <h2 className="user-name">{`${this.props.user.username}`.toUpperCase()}</h2>
+    }
+   }
 
 
    renderCatches = () => {
@@ -16,8 +21,8 @@ class User extends Component{
     render(){
         return(
             <div className="user-div">
-                <h2 className="user-name">{`${this.props.user.username}`.toUpperCase()}</h2>
-            
+               
+                {this.renderName()}
                
             </div>
         )

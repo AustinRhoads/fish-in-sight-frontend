@@ -1,25 +1,85 @@
 import React, { Component } from 'react'
 import Home from './containers/Home.js'
-import {BrowserRouter, Switch, Route} from 'react-router-dom'
+import {BrowserRouter, Switch, Route, Redirect} from 'react-router-dom'
 import DashboardContainer from './containers/DashboardContainer.js'
 import './App.css'
-//import axios from 'axios'
+import axios from 'axios'
 import NavBarContainer from './containers/NavBarContainer'
 import { connect } from 'react-redux'
 import {checkLogin, userLogin, userLogout, userRegister} from './actions/userActions'
+import  { getSpecies } from './actions/speciesActions.js'
+import  { getBaits } from './actions/baitActions.js'
+import  { getSpots } from './actions/spotActions.js'
+//import  { getUserCatches } from './actions/catchActions.js'
+
 
 
 
 class App extends Component{
+
+  state = {
+    loggedInStatus: "NOT_LOGGED_IN",
+    user: {},
+    redirect: false,
+  }
+
+
+
+
+
+checkLoginStatus = () =>{
+  axios.get('http://localhost:3000/logged_in', {withCredentials: true})
+  .then(resp => {
+   
+      if(resp.data.logged_in === true && this.state.loggedInStatus === "NOT_LOGGED_IN"){
+          
+        this.setState({
+          loggedInStatus: "LOGGED_IN",
+          user: resp.data.user,
+          redirect: false,
+        })
+         
+         
+      } else if (!resp.data.logged_in && this.state.loggedInStatus === "LOGGED_IN") {
+        this.setState({
+          loggedInStatus: "NOT_LOGGED_IN",
+          user: {},
+          redirect: true,
+        });
+        
+        
+      } else {
+        this.setState({redirect: true})
+      }
+  }).catch(error => {
+    console.log("check logged in error: ", error)
+  })
+}
+
 
 
   getCSRFToken = () => {
     return unescape(document.cookie.split('=')[1])
   }
 
-  componentDidMount(){
-   this.props.checklogin();
+  handelLogin = (data) => {
+    
+    this.setState({
+      loggedInStatus: "LOGGED_IN",
+      user: data,
+    })
   }
+ 
+
+  componentDidMount(){
+    this.checkLoginStatus()
+   this.props.checklogin();
+   this.props.getSpecies();
+   this.props.getSpots();
+   this.props.getBaits();
+   //this.props.getUserCatches(this.props.user.id);
+  }
+
 
 
 
@@ -27,19 +87,24 @@ class App extends Component{
 
 
   render(){
+  
     return (
       <div className="App">
         
-        <NavBarContainer user={this.props.user} loggedInStatus={this.props.loggedInStatus} userLogout={this.props.userLogout} />
-        <BrowserRouter>
-       
-        <Switch>
-          <Route exact path={"/"} component={() => <Home userLogin={this.props.userLogin}  getCSRFToken={this.getCSRFToken} />}  />
-          <Route exact path={"/dashboard"} component={() => <DashboardContainer loggedInStatus={this.props.loggedInStatus} user={this.props.user} /> } />
+          <NavBarContainer user={this.props.user} loggedInStatus={this.props.loggedInStatus} userLogout={this.props.userLogout} />
+          <BrowserRouter>
+
+          <Switch>
+            <Route exact path={"/"}  render={props => (
+               <Home {...props} handelLogin={this.handelLogin} loggedInStatus={this.state.loggedInStatus} userLogin={this.props.userLogin}  getCSRFToken={this.getCSRFToken} />
+            )}  />
+            
+            <Route exact path={"/dashboard"} render={props => <DashboardContainer {...props} redirect={this.state.redirect} spots={this.props.spots} baits={this.props.baits} species={this.props.species}  user={this.state.user} loggedInStatus={this.state.loggedInStatus} /*catches={this.props.user.catches}*/ /> } />
+
+          </Switch>
+          </BrowserRouter>
           
-        </Switch>
-        </BrowserRouter>
-        
+       
       </div>
     );
   }
@@ -49,8 +114,11 @@ class App extends Component{
 
 const mapStateToProps = state => {
   return{
-    loggedInStatus: state.userStatus.loggedInStatus,
+   // loggedInStatus: state.userStatus.loggedInStatus,
     user: state.userStatus.user,
+    species: state.species.all_species,
+    spots: state.spots.all_spots,
+    baits: state.baits.all_baits,
   }
   
 }
@@ -62,8 +130,13 @@ return {
   checklogin: () => dispatch(checkLogin()),
   userLogin: (user) => dispatch(userLogin(user)),
   userLogout: () => dispatch(userLogout()),
-  userRegister: (newUser) => dispatch(userRegister(newUser))
+  userRegister: (newUser) => dispatch(userRegister(newUser)),
+  getSpecies: () =>  dispatch(getSpecies()),
+  getBaits: () => dispatch(getBaits()),
+  getSpots: () => dispatch(getSpots()),
 }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps) (App);
+
+//<Route exact path={"/dashboard"} component={() => <DashboardContainer checklogin={this.props.checklogin} spots={this.props.spots} baits={this.props.baits} species={this.props.species}  user={this.props.user} loggedInStatus={this.props.loggedInStatus} /*catches={this.props.user.catches}*/ /> } />

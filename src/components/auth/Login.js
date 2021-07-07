@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom';
 
+
 class Login extends Component {
 
     state = {
@@ -31,8 +32,30 @@ class Login extends Component {
         }
   
 
-        this.props.userLogin(userLoggingIn)
-        this.props.history.push('/dashboard')
+       // this.props.userLogin(userLoggingIn)
+       // this.props.history.push('/dashboard')
+       const configObject = {
+        method: "POST",
+        credentials: 'include',
+        headers: {
+            'X-CSRF-Token': unescape(document.cookie.split('=')[1]),
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userLoggingIn)
+    }
+  
+    fetch("http://localhost:3000/sessions", configObject)
+    .then(resp => resp.json())
+    .then(resp => {
+        if (resp.logged_in === true){
+            console.log(resp.user)
+           this.props.handelSuccessfulAuth(resp.user)
+           this.props.userLogin(userLoggingIn)
+        }
+    })
+    .catch(error =>{
+        console.log("Login error", error)
+    });  
     }
 
     handelOnChange = (e) => {
