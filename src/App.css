@@ -122,7 +122,7 @@ hr.solid {
       text-align: center;
       margin: auto;
       width: 700px;
-      height: auto;
+      height: 500px;
       color: papayawhip;
       border: solid orange 1px;
       background-image: url('/home/austin/projects/fish-in-sight/fish-in-sight-frontend/src/lures02.jpg');
@@ -137,6 +137,7 @@ hr.solid {
   }
 
   .new-catch-form{
+    
       width: 500px;
       margin: auto;
       text-align: center;
@@ -145,56 +146,49 @@ hr.solid {
     background-color: rgba(0,0,0,0.3);
   }
 
+  .catch-list-side-panel{
+    
+   float: right;
+    width: 37%;
+    height: 98%;
+    margin-right: 0px;
+    background-color: blue;
+    border: solid orange 1px;
+
+  }
+
   .catches-list{
+    height: 390px;
     color: papayawhip;
-    margin-left: 0px;
-      width: 70%;
-      
-     /*
-    background-image: url('/home/austin/projects/fish-in-sight/fish-in-sight-frontend/src/carpingrass.jpg');
-    background-size: cover;
-    position: relative;
-    background-position: 0px -20px;
-    */
+    width: 767px;
+    margin-left: 12%;
     border: solid black 1px;
     background-color: rgba(0,0,0,0.8);
   }
   .list-grid{
-      width: 100%;
- 
+    
+      width: 60%;
+      height: 98%;
+     
+      float:left;
   }
 
   .list-grid-ul{
+    border: solid orange 1px;
     padding-left: 0px;
+    padding-top: 3px;
+    margin: 6px;
     width: 100%;
-    height: 100%;
-    
-    /*
-    display: inline-grid;
-    
-    grid-template-columns: 1fr 1fr 1fr;
-     grid-template-rows: 1fr 1fr 1fr;
-    */
-
-
-    /*
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    */
-    
+    height: 99%; 
+    overflow: auto;
     align-content: space-evenly;
   }
 
   .catches-list li{
     list-style-type: none;
     margin: 0px;
-    
-    /*flex-shrink: 1;*/
-    /*flex: 1 1 auto;*/
- 
-
-    
+    margin-left:3px;
+    margin-top: 6px;
   }
 
   .catch-li-box{
@@ -205,28 +199,9 @@ hr.solid {
   }
 
   .catch-image-box{
-      
-      
-      /*
-      width: 350px;
-      height:200px;
-      */
-     /* min-height: 200px;*/
-    
-      
-      /*border: solid orange 1px;*/
-     /* background-color: rgba(0,0,0,0.2);*/
-     /* overflow-y: hidden; */
-
      margin-left: 9px
   }
-  /*
-  .catch-box:hover  .catch-box-overlay{
-    transform: translate3d(0, 0, 0);
-    background-color: turquoise;
-   opacity: 1;
-  }
-  */
+
 
   .info-box{
    border: solid orange 1px;
@@ -237,16 +212,7 @@ hr.solid {
   
   .catch-image{
     position: relative;
-   
-   /* min-width: 12rem;*/
-   /* flex-shrink: 1;*/
-    /*
-    max-width: 98%;
-    max-height: 98%;
-    */
     object-fit: contain;
-    /*background-size: cover;*/
-    
     border: solid orange 1px;
     background-color: rgb(0,0,0,0.3);
 }

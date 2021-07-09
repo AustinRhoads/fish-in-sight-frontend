@@ -1,64 +1,90 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
+import { connect } from 'react-redux';
 import CatchBox from './CatchBox';
 import cuid from 'cuid'
-import { connect } from 'react-redux';
-import { getUserCatches } from "/home/austin/projects/fish-in-sight/fish-in-sight-frontend/src/actions/catchActions.js"
-
-class Catches extends Component{
-
-    state = {
-        catches: []
-    }
-
-    componentDidMount(){
-      /* this.loadCatches() */
-      this.props.getUserCatches(this.props.uid)
-    }
+import FilterCatches from './FilterCatches.js'
 
 
-    renderList = () => {
-        
-            if(this.props.userCatches && this.props.userCatches.length > 0){
+
+export function Catches(props){
+
+ console.log(props)
+    
+const [filterOn, setFilterOn] = useState(false)
+const [filteredList, setFilteredList] = useState(null)
+
+ const filterize = (newList) => {
+     setFilterOn(true);
+     setFilteredList(newList)
+ }
+
+ const unfilterize = () => {
+    setFilterOn(false);
+    setFilteredList(null)
+ }
+
+
+ 
+
+   const renderList = () => {
+
+           
+    if(!filterOn){
+        if(props.catches && props.catches.length > 0){
                 
-                return  this.props.userCatches.map(caught =>  caught.image ? <li key={cuid()} > <CatchBox uid={this.props.uid} caught={caught} /> </li> : null )
-            } else if(this.props.loadingCatches) {
-               return <h3>Loading...</h3>
-            }else {
-                return <h3>No Catches Logged Yet</h3>
-            }
-        
+            return  props.catches.map(caught => caught.image ?  <li key={cuid()} > <CatchBox uid={caught.user_id} caught={caught} /> </li> : null )
+        }else {
+            return <h3>No Catches Logged Yet</h3>
+        }
+    } else {
+        if(filteredList && filteredList.length > 0){
+                
+            return  filteredList.map(caught => caught.image ?  <li key={cuid()} > <CatchBox uid={caught.user_id} caught={caught} /> </li> : null )
+        }else {
+            return <h3>No Matching Catches</h3>
+        }
+    }
+
+            
+            
+
 
     }
 
+  
 
-    render(){
+
+
+
+   
+
        
         return(
-          
+          <>
+         
             <div className="catches-list">
                 <div className="list-grid">
                     <ul className="list-grid-ul">
-                        {this.renderList()}
+                        {renderList()}
                     </ul>
                 </div>
+                <FilterCatches filterize={filterize} unfilterize={unfilterize} species={props.species} baits={props.baits} spots={props.spots} catches={props.catches} />
                
                 </div>
+    
+                </>
         )
-    }
-}
-
-const mapDispatchToProps = dispatch => {
-    return {
-        getUserCatches: (uid) => dispatch(getUserCatches(uid))
-    }
+    
 }
 
 const mapStateToProps = state => {
-   
+    
     return {
-        userCatches: state.catches.userCatches,
-        loadingCatches: state.catches.loading,
+        species: state.species.all_species,
+        baits: state.baits.all_baits,
+        spots: state.spots.all_spots,
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps) (Catches);
+
+export default connect(mapStateToProps) (Catches);

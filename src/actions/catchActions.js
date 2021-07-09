@@ -35,13 +35,21 @@ export function getUserCatches (uid){
         fetch(`http://localhost:3000/api/v1/users/${uid}`)
         .then(resp => resp.json())
         .then(obj => {
-         
+        
             if(obj){
+                console.log("catches obj",obj.catches)
               dispatch({type: "GET_USER_CATCHES", catches: obj.catches})
             }
             
            
         })
 
+    }
+}
+
+
+export function filterUserCatches(filtered){
+    return(dispatch) => {
+        dispatch({type: "SET_FILTERED_USER_CATCHES", filtered: filtered})
     }
 }

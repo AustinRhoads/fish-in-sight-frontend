@@ -1,6 +1,6 @@
 
 
-export default function catchesReducer (state={all_catches: [], usercatches: [], loading: false,}, action) {
+export default function catchesReducer (state={all_catches: [], usercatches: [], loading: false, filtered: []}, action) {
 
     switch(action.type){
 
@@ -18,7 +18,9 @@ export default function catchesReducer (state={all_catches: [], usercatches: [],
 
         return {...state, all_catches: action.all_catches, loading: false}
 
+        case  "SET_FILTERED_USER_CATCHES":
 
+        return {...state, filtered: action.filtered};
         default: 
 
         return state;

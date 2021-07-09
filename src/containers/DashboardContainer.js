@@ -1,20 +1,25 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Redirect, } from 'react-router-dom'
-import User from '../components/users/User'
+//import User from '../components/users/User'
 import CatchInput from '../components/catches/CatchInput'
 import BaitInput from '../components/baits/BaitInput'
 import Catches from '../components/catches/Catches'
 import SpotInput from '../components/spots/SpotInput'
 //import MapContainer from '../components/maps/MapContainer'
 //import cuid from 'cuid'
-//import { connect } from 'react-redux'
+
 
 
 
 function DashboardContainer (props){
    
 const redirect = props.redirect;
-console.log(redirect);
+console.log(props.userCatches);
+
+
+
+
+
     /*
 
         state = {
@@ -60,7 +65,7 @@ console.log(redirect);
               { /* {this.renderUser()} */}
                 <h3>STATUS: {props.loggedInStatus}</h3>
                
-            <Catches uid = {props.user.id} /* catches={this.state.catches} */ /*userCatches={this.props.userCatches} */ />
+            <Catches uid = {props.user.id} catches={props.userCatches} /* catches={this.state.catches} */ /*userCatches={this.props.userCatches} */ />
             <br/>
             <CatchInput uid = {props.user.id} /*species={this.props.species}  baits={this.props.baits}  spots={this.props.spots} */     /*updateCatches={(caught) => this.updateData("catches", caught)}*//>
             <br/>
@@ -77,16 +82,7 @@ console.log(redirect);
     
 }
 
-const mapStateToProps = state => {
-    return{
-    //  loggedInStatus: state.userStatus.loggedInStatus,
-     // user: state.userStatus.user,
-      species: state.species.all_species,
-      spots: state.spots.all_spots,
-      baits: state.baits.all_baits,
-    }
-    
-  }
 
 
-export default /*connect(mapStateToProps) (*/DashboardContainer;//);
+
+export default DashboardContainer;
