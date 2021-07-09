@@ -145,6 +145,12 @@ hr.solid {
       margin-bottom: 27px;
     background-color: rgba(0,0,0,0.3);
   }
+  .whaaaaa{
+    position: relative;
+    float: right;
+    
+   
+  }
 
   .image-preview-div{
     position: relative;
@@ -182,9 +188,24 @@ hr.solid {
   }
   
   
-  .catch-img-preview:hover + .image-preview-delete-button{
+  .image-preview-div:hover > .image-preview-delete-button{
     display: block;
   }
+
+.new-catch-selected-attributes-box{
+  margin-top: 230px;
+  text-align: center;
+ 
+}
+
+.new-catch-selected-attributes-box > h3 {
+  margin: 2px;
+}
+.ncsab-species{
+
+}
+
+
 
   .catch-list-side-panel{
     text-align: center;

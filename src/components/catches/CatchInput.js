@@ -14,9 +14,9 @@ class CatchInput extends Component {
     state = {
         user_id: "",
         notes: "",
-        species_id: null, 
-        bait_id: null,
-        spot_id: null,
+        species_id: "", 
+        bait_id: "",
+        spot_id: "",
         image: null,
         image_preview: null,
         date: "",
@@ -62,7 +62,7 @@ handleOnSubmit = (e) => {
    .then(resp => resp.json())
    .then(resp => {
        console.log("catches res", resp);
-       this.props.updateCatches(resp);
+      // this.props.updateCatches(resp);
    }).catch(error =>{
        console.log("catches error", error)
    });
@@ -152,6 +152,17 @@ selectedSpeciesName = () => {
     }
 
 }
+
+
+selectedBaitName = () => {
+    if(this.state.bait_id){
+        let bait = this.props.baits.find(bait => bait.id == this.state.bait_id)
+      
+       return bait.name
+    }
+
+}
+
     render(){
         return(
             <div className="new-catch-div">
@@ -159,14 +170,20 @@ selectedSpeciesName = () => {
                 <br />
                 <br />
                 <form className="new-catch-form" onSubmit={ e => this.handleOnSubmit(e)}>
-
+                <div className="whaaaaa" style={{height: 380, width: 220}}>
                 <div className="image-preview-div" style={{height: 220, width: 220}} >
                      {this.renderImagePreview()}
                      <br />
+
+                </div>
+                <div className="new-catch-selected-attributes-box">
                      <h3>{this.selectedSpeciesName()}</h3>
+                     <h3>{this.selectedBaitName()}</h3>
+                    
+                     </div>
                 </div>
                 
-                    <br />
+                    
                     <br />
                     <input type="file" accept="image/*" multiple={false} name="image" onChange={e => this.fileSelectHandler(e)}/>
                   
@@ -177,7 +194,7 @@ selectedSpeciesName = () => {
 
                 <select name="species_id" value={this.state.species_id} onChange={(e) => this.handleOnChange(e)} placeholder="choose a species">
                    
-                    <option disabled selected value> -- select a species -- </option>
+                    <option disabled value=""> -- select a species -- </option>
                     {this.renderSpeciesOptions()}
                 </select>
 
@@ -188,7 +205,7 @@ selectedSpeciesName = () => {
 
                 <select name="bait_id" value={this.state.bait_id} onChange={(e) => this.handleOnChange(e)} placeholder="choose bait">
                     
-                <option disabled selected value> -- which bait did you use -- </option>
+                <option disabled value=""> -- which bait did you use -- </option>
                     {this.renderBaitsOptions()}
                 </select>
 
@@ -198,7 +215,7 @@ selectedSpeciesName = () => {
                 <label htmlFor="spot_id">Known Location:</label>
                 <select name="spot_id" value={this.state.spot_id} onChange={(e) => this.handleOnChange(e)} placeholder="choose a location">
                     
-                    <option disabled selected value> -- select from known spots -- </option>
+                    <option disabled value=""> -- select from known spots -- </option>
                     {this.renderSpotsOptions()}
                 </select>
 
