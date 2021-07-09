@@ -97,6 +97,7 @@ const renderImage = () => {
                 </div>*/}
                 <div className="info-box" style={{}}>
                 {props.caught.species.name}, <i>{`${props.caught.species.scientific_name}`}</i>
+                <br />
                 Bait: {props.caught.bait.name}
                 </div>
 
