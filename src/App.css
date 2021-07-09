@@ -147,12 +147,12 @@ hr.solid {
   }
 
   .catch-list-side-panel{
-    
+    text-align: center;
    float: right;
     width: 37%;
     height: 98%;
     margin-right: 0px;
-    background-color: blue;
+    
     border: solid orange 1px;
 
   }
