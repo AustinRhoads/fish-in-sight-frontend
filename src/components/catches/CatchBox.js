@@ -99,6 +99,8 @@ const renderImage = () => {
                 {props.caught.species.name}, <i>{`${props.caught.species.scientific_name}`}</i>
                 <br />
                 Bait: {props.caught.bait.name}
+                <br/>
+                datetime: {props.caught.date}
                 </div>
 
             </div>

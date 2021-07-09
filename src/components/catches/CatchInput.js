@@ -14,11 +14,12 @@ class CatchInput extends Component {
     state = {
         user_id: "",
         notes: "",
-        species_id: 1, 
-        bait_id: 1,
-        spot_id: 1,
+        species_id: null, 
+        bait_id: null,
+        spot_id: null,
         image: null,
         image_preview: null,
+        date: "",
     }
 
 
@@ -68,11 +69,12 @@ handleOnSubmit = (e) => {
 
    this.setState({
     notes: "",
-    species_id: 1, 
-    bait_id: 1,
-    spot_id: 1,
+    species_id: null, 
+    bait_id: null,
+    spot_id: null,
     image: null,
     image_preview: null,
+    date: "",
    })
 
 
@@ -83,46 +85,6 @@ componentDidMount(){
     this.setState({
         user_id: this.props.uid,
     })
-
-    //this.props.getBaits();
-    //this.props.getSpots();
-
-    /*
-    this.props.getBaits();
-    this.props.getSpots();
-    */
-
-
-    /*
-    fetch(`http://localhost:3000/api/v1/species`)
-    .then(resp => resp.json())
-    .then(ary => {
-
-      this.setState({species: ary});
-    })
-    */
-
-    /*
-
-    fetch(`http://localhost:3000/api/v1/baits`)
-    .then(resp => resp.json())
-    .then(ary => {
-       this.setState({baits: ary})
-    })
-
-    */
-
-    /*
-    
-    fetch(`http://localhost:3000/api/v1/spots`)
-    .then(resp => resp.json())
-    .then(ary => {
-
-     // this.setState({spots: [...ary, {id: this.state.newSpotId, lat: 0, lng: 0}]}) 
-      this.setState({spots: ary})
-    })
-    */
-    
 
 }
 
@@ -146,22 +108,50 @@ renderSpotsOptions = () => {
 
 
 fileSelectHandler = (e) => {
- EXIF.getData(e.target.files[0], function(){ 
-      const dataz =  EXIF.getAllTags(this);
-      console.log(dataz)
-    });
- 
-   this.setState({image: e.target.files[0], image_preview: URL.createObjectURL(e.target.files[0])})
+    if(e.target.files[0]){
+        EXIF.getData(e.target.files[0], function(){ 
+            const dataz =  EXIF.getAllTags(this);
+          
+            console.log(dataz)
+          });
+       
+         this.setState({image: e.target.files[0], image_preview: URL.createObjectURL(e.target.files[0])})
+    }
+
+}
+
+unselectImage = (e) => {
+    e.preventDefault();
+    this.setState({
+        image: null,
+        image_preview: null,
+    })
 }
 
 renderImagePreview = () => {
+ 
     if(this.state.image_preview){
         return(
+            
+               <> 
             <img alt="img-preview" className="catch-img-preview" src={this.state.image_preview}></img>
+            <button className="image-preview-delete-button" onClick={e => this.unselectImage(e)}>-</button>
+            </>
         )
     }
+ 
+  
 }
 
+
+selectedSpeciesName = () => {
+    if(this.state.species_id){
+        let spec = this.props.species.find(spec => spec.id == this.state.species_id)
+      
+       return spec.name
+    }
+
+}
     render(){
         return(
             <div className="new-catch-div">
@@ -170,14 +160,24 @@ renderImagePreview = () => {
                 <br />
                 <form className="new-catch-form" onSubmit={ e => this.handleOnSubmit(e)}>
 
+                <div className="image-preview-div" style={{height: 220, width: 220}} >
+                     {this.renderImagePreview()}
+                     <br />
+                     <h3>{this.selectedSpeciesName()}</h3>
+                </div>
+                
+                    <br />
+                    <br />
                     <input type="file" accept="image/*" multiple={false} name="image" onChange={e => this.fileSelectHandler(e)}/>
-                    {this.renderImagePreview()}
+                  
                  
             <br />
             <br/>
                     <label htmlFor="species">Species: </label>
 
                 <select name="species_id" value={this.state.species_id} onChange={(e) => this.handleOnChange(e)} placeholder="choose a species">
+                   
+                    <option disabled selected value> -- select a species -- </option>
                     {this.renderSpeciesOptions()}
                 </select>
 
@@ -187,6 +187,8 @@ renderImagePreview = () => {
                 <label htmlFor="bait_id">Bait: </label>
 
                 <select name="bait_id" value={this.state.bait_id} onChange={(e) => this.handleOnChange(e)} placeholder="choose bait">
+                    
+                <option disabled selected value> -- which bait did you use -- </option>
                     {this.renderBaitsOptions()}
                 </select>
 
@@ -195,6 +197,8 @@ renderImagePreview = () => {
 
                 <label htmlFor="spot_id">Known Location:</label>
                 <select name="spot_id" value={this.state.spot_id} onChange={(e) => this.handleOnChange(e)} placeholder="choose a location">
+                    
+                    <option disabled selected value> -- select from known spots -- </option>
                     {this.renderSpotsOptions()}
                 </select>
 

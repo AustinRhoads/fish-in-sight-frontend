@@ -140,10 +140,50 @@ hr.solid {
     
       width: 500px;
       margin: auto;
-      text-align: center;
+      text-align: left;
       align-content: center;
       margin-bottom: 27px;
     background-color: rgba(0,0,0,0.3);
+  }
+
+  .image-preview-div{
+    position: relative;
+    float: right;
+    border: solid orange 1px;
+    max-width:220px;
+    max-height: 220px;
+  }
+  .image-preview-delete-button{
+    display: none;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    border-radius: 3px;
+    background-color: rgba(253, 252, 252);
+    z-index: 2;
+  }
+  
+  .catch-img-preview{
+    
+    display: block;
+    max-width:100%;
+    max-height: 100%;
+    margin-right: auto;
+    margin-left: auto;
+  }
+  
+  .catch-img-preview:hover{
+    cursor: pointer;
+  }
+  
+  .image-preview-delete-button:hover {
+    cursor: pointer;
+    display: block;
+  }
+  
+  
+  .catch-img-preview:hover + .image-preview-delete-button{
+    display: block;
   }
 
   .catch-list-side-panel{
@@ -236,14 +276,7 @@ hr.solid {
     cursor: pointer;
 }
 
-.catch-img-preview{
-  position: relative;
-  display: block;
-  max-width:33%;
-  max-height: 33%;
-  margin-right: auto;
-  margin-left: auto;
-}
+
 
 
 
