@@ -21,7 +21,7 @@ class User extends Component{
     render(){
         return(
             <div className="user-div">
-               
+               <h2>USER DIV</h2>
                 {this.renderName()}
                
             </div>

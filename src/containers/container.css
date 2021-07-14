@@ -1,0 +1,15 @@
+.aux-nav{
+    height: 33px;
+    border-right: solid black 1px;
+    border-left: solid black 1px;
+}
+
+.aux-nav a{
+    padding: 9px;
+    text-decoration: none;
+    border-right: solid black 1px;
+}
+
+.aux-nav a:hover{
+    border-bottom: solid black 1px;
+}

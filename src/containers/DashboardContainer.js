@@ -1,20 +1,22 @@
 import React from 'react'
-import { Redirect, } from 'react-router-dom'
+import { Redirect,/* Route, Link*/} from 'react-router-dom'
+//import {Route} from 'react-router-dom'
 //import User from '../components/users/User'
 import CatchInput from '../components/catches/CatchInput'
 import BaitInput from '../components/baits/BaitInput'
-import Catches from '../components/catches/Catches'
+//import Catches from '../components/catches/Catches'
 import SpotInput from '../components/spots/SpotInput'
 //import MapContainer from '../components/maps/MapContainer'
 //import cuid from 'cuid'
+//import User from '../components/users/User.js'
 
 
 
 
-function DashboardContainer (props){
+function DashboardContainer ({user, spots, userCatches, redirect, match, loggedInStatus}) {
    
-const redirect = props.redirect;
-console.log(props.userCatches);
+//const redirect = match.redirect;
+//console.log(props);
 
 
 
@@ -51,29 +53,54 @@ console.log(props.userCatches);
 
   */
 
+
+    /*
+    const updateCatches1 = (newCatch) => {
+        this.props.updateCatches(newCatch);
+      // updateCatches(newCatch);
+    }
+    */
+
     
   
 
         
-      if(redirect){
-          return <Redirect to="/" />
-      }
+    //  if(redirect){
+    //      return <Redirect to="/" />
+    //  }
+
+      const checkLogin = () => {
+        
+        if(redirect){
+            console.log("logged out")
+            return <Redirect to="/" />
+         
+        }
+    
+    }
         
         return(
+           
+          
             <div className="dashbaord-div">
+             {checkLogin()}
                
               { /* {this.renderUser()} */}
-                <h3>STATUS: {props.loggedInStatus}</h3>
-               
-            <Catches uid = {props.user.id} catches={props.userCatches} /* catches={this.state.catches} */ /*userCatches={this.props.userCatches} */ />
-            <br/>
-            <CatchInput uid = {props.user.id} /*species={this.props.species}  baits={this.props.baits}  spots={this.props.spots} */     /*updateCatches={(caught) => this.updateData("catches", caught)}*//>
-            <br/>
-            <BaitInput uid = {props.user.id} /* updateBait={(bait) => this.updateData("baits", bait)} */ />
-            <br/>
-            <SpotInput uid = {props.user.id} /* updateSpots={(spot) => this.updateData("spots", spot)} */ spots={props.spots}/>
-            <br/>
+                <h3>STATUS: {loggedInStatus}</h3>
            
+                
+               {/* <Route path={`${match.url}`}  render={ dashboardProps => (<Catches {...dashboardProps}  uid = {user.id} catches={userCatches}   /> )} />*/}
+               
+                
+                <CatchInput uid = {user.id} /* updateCatches={updateCatches1}*/ /*species={this.props.species}  baits={this.props.baits}  spots={this.props.spots} */     /*updateCatches={(caught) => this.updateData("catches", caught)}*//>
+                
+                <BaitInput uid = {user.id} /* updateBait={(bait) => this.updateData("baits", bait)} */ />
+                
+                <SpotInput uid = {user.id} /* updateSpots={(spot) => this.updateData("spots", spot)} */ spots={spots}/>
+                
+               
+          
+            
             <br/>
 
             <div className="dashboard-footer"></div>

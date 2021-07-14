@@ -14,9 +14,7 @@ class FilterCatches extends Component{
 
 
 
-    componentDidMount(){
-        console.log(this.props)
-    }
+
 
     renderSpeciesOptions = () => {
 
@@ -75,7 +73,7 @@ class FilterCatches extends Component{
     resetOne = (e) => {
         this.setState({[e.target.nextSibling.name]: null}, () => this.runFilterize(this.props.catches))
         e.target.nextSibling.value = ""
-        console.log(e.target.nextSibling.value)
+       
 
     }
 

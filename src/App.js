@@ -10,6 +10,11 @@ import { userLogin, userLogout, userRegister} from './actions/userActions'
 import  { getSpecies } from './actions/speciesActions.js'
 import  { getBaits } from './actions/baitActions.js'
 import  { getSpots } from './actions/spotActions.js'
+import Catches from './components/catches/Catches.js'
+import CatchInput from './components/catches/CatchInput.js'
+//import { StatsBox } from './components/users/StatsBox';
+import AuxNavBar from './containers/AuxNavBar.js'
+
 //import { getUserCatches } from './actions/catchActions.js'
 
 
@@ -33,7 +38,7 @@ class App extends Component{
 checkLoginStatus = () =>{
   axios.get('http://localhost:3000/logged_in', {withCredentials: true})
   .then(resp => {
-    console.log(resp.data.user)
+    console.log("first user: ",resp.data.user)
    
       if(resp.data.logged_in === true && this.state.loggedInStatus === "NOT_LOGGED_IN"){
           
@@ -41,10 +46,14 @@ checkLoginStatus = () =>{
           loggedInStatus: "LOGGED_IN",
           user: resp.data.user,
           redirect: false,
-          userCatches: resp.data.catches,
+         //userCatches: resp.data.catches,
         })
 
-        this.getUserCatches(resp.data.user.id)
+        //////////testing
+
+     
+
+        this.getUserAndUserCatches(resp.data.user.id)
 
       
          
@@ -82,19 +91,30 @@ checkLoginStatus = () =>{
     })
   }
 
-  getUserCatches(uid){
+
+
+  getUserAndUserCatches(uid){
     fetch(`http://localhost:3000/api/v1/users/${uid}`)
     .then(resp => resp.json())
     .then(obj => {
-      console.log("AHAHAHAHAHAHA", obj.catches)
+      
         if(obj){
-           this.setState({userCatches: obj.catches})
-          
+           this.setState({
+             user: obj,
+             userCatches: obj.catches,
+            })
         }
         
        
     })
 
+  }
+
+
+  updateCatches = (newCatch) => {
+    this.setState({
+      userCatches: [...this.state.userCatches, newCatch]
+    })
   }
  
 
@@ -107,6 +127,13 @@ checkLoginStatus = () =>{
    //this.props.getUserCatches(this.props.user.id);
  
 
+  }
+
+  renderAuxNav = () => {
+    if(this.state.loggedInStatus === "LOGGED_IN"){
+      return <AuxNavBar />
+    }
+    
   }
 
 
@@ -123,6 +150,7 @@ checkLoginStatus = () =>{
       <div className="App">
         
           <NavBarContainer user={this.state.user} loggedInStatus={this.state.loggedInStatus} userLogout={this.props.userLogout} />
+          {this.renderAuxNav()}
           <BrowserRouter>
 
           <Switch>
@@ -130,11 +158,15 @@ checkLoginStatus = () =>{
                <Home {...props} handelLogin={this.handelLogin}  loggedInStatus={this.state.loggedInStatus} userLogin={this.props.userLogin}  getCSRFToken={this.getCSRFToken} />
             )}  />
             
-            <Route exact path={"/dashboard"} render={props => <DashboardContainer {...props} redirect={this.state.redirect} spots={this.props.spots} baits={this.props.baits} species={this.props.species}  user={this.state.user} loggedInStatus={this.state.loggedInStatus} userCatches={this.state.userCatches} /*catches={this.props.user.catches}*/ /> } />
-
+            <Route exact path={"/dashboard"} render={props => <DashboardContainer {...props} redirect={this.state.redirect} spots={this.props.spots} baits={this.props.baits} species={this.props.species}  user={this.state.user} loggedInStatus={this.state.loggedInStatus} userCatches={this.state.userCatches}  updateCatches={this.updateCatches} /*catches={this.props.user.catches}*/ /> } />
+            <Route exact path={"/mycatches"} render={props => <Catches {...props}  redirect={this.state.redirect}  user={this.state.user} uid = {this.state.user.id} catches={this.state.userCatches}    /> } />
+            <Route path={"/newCatch"} render={props => <CatchInput {...props} redirect={this.state.redirect} uid={this.state.user.id} />} />
           </Switch>
           </BrowserRouter>
           
+          <br/>
+
+<div className="dashboard-footer"></div>
        
       </div>
     );

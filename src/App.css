@@ -211,7 +211,7 @@ hr.solid {
     text-align: center;
    float: right;
     width: 37%;
-    height: 98%;
+    height: 90%;
     margin-right: 0px;
     
     border: solid orange 1px;
@@ -219,7 +219,7 @@ hr.solid {
   }
 
   .catches-list{
-    height: 390px;
+    height: 540px;
     color: papayawhip;
     width: 767px;
     margin-left: 12%;
@@ -240,7 +240,7 @@ hr.solid {
     padding-top: 3px;
     margin: 6px;
     width: 100%;
-    height: 99%; 
+    height: 90%; 
     overflow: auto;
     align-content: space-evenly;
   }

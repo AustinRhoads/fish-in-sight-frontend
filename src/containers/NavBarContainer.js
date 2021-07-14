@@ -3,7 +3,7 @@ import React from 'react'
 
 function NavBarContainer(props){
 
-console.log(props)
+
 
   const  logout = () => {
         

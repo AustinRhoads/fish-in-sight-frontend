@@ -1,7 +1,10 @@
 import cuid from 'cuid';
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import EXIF from 'exif-js';
+//import EXIF from 'exif-js';
+//import {ExifImage} from 'exif'
+
+
 /*
 import  { getSpecies } from '/home/austin/projects/fish-in-sight/fish-in-sight-frontend/src/actions/speciesActions.js';
 import  { getBaits } from "/home/austin/projects/fish-in-sight/fish-in-sight-frontend/src/actions/baitActions.js";
@@ -20,6 +23,7 @@ class CatchInput extends Component {
         image: null,
         image_preview: null,
         date: "",
+        guessed_date: "",
     }
 
 
@@ -36,17 +40,19 @@ getCSRFToken = () => {
 }
 
 handleOnSubmit = (e) => {
-    
+    console.log(this.state)
 
     e.preventDefault();
-    
    const formData = new FormData();
-   formData.append('user_id', this.state.user_id)
+ 
+   formData.append('user_id', this.props.uid)
    formData.append('species_id', this.state.species_id)
    formData.append('bait_id', this.state.bait_id)
    formData.append('spot_id', this.state.spot_id)
    formData.append('notes', this.state.notes)
    formData.append('image', this.state.image)
+   formData.append('date', this.state.date)
+    
 
    const configObject = {
     method: "POST",
@@ -58,23 +64,26 @@ handleOnSubmit = (e) => {
     body: formData
 }
 
+
    fetch("http://localhost:3000/api/v1/catches", configObject)
    .then(resp => resp.json())
    .then(resp => {
        console.log("catches res", resp);
       // this.props.updateCatches(resp);
+     // this.props.updateCatches(resp)
    }).catch(error =>{
        console.log("catches error", error)
    });
 
    this.setState({
     notes: "",
-    species_id: null, 
-    bait_id: null,
-    spot_id: null,
+    species_id: "", 
+    bait_id: "",
+    spot_id: "",
     image: null,
     image_preview: null,
     date: "",
+    guessed_date: "",
    })
 
 
@@ -86,7 +95,12 @@ componentDidMount(){
         user_id: this.props.uid,
     })
 
+    
+   
+
 }
+
+
 
 renderSpeciesOptions = () => {
 
@@ -108,17 +122,40 @@ renderSpotsOptions = () => {
 
 
 fileSelectHandler = (e) => {
-    if(e.target.files[0]){
-        EXIF.getData(e.target.files[0], function(){ 
-            const dataz =  EXIF.getAllTags(this);
-          
-            console.log(dataz)
-          });
-       
+    
+        this.timeExtract(e);
+ 
+        if(e.target.files[0]){
          this.setState({image: e.target.files[0], image_preview: URL.createObjectURL(e.target.files[0])})
     }
+   
+    
+}
+
+timeExtract = (e) => {
+    
+
+    if(e.target.files[0]){
+        const file = e.target.files[0];
+        console.log(file)
+        this.setState({guessed_date: file.lastModifiedDate})
+      
+ 
+       /*
+      EXIF.getData(e.target.files[0], function(){ 
+             const dataz =  EXIF.getAllTags(this);
+            document.getElementById("date-input").value =dataz.DateTime
+
+           })
+           */
+        
+        
+
+    }
+        
 
 }
+
 
 unselectImage = (e) => {
     e.preventDefault();
@@ -126,6 +163,7 @@ unselectImage = (e) => {
         image: null,
         image_preview: null,
     })
+    document.getElementById("file-input").value = null;
 }
 
 renderImagePreview = () => {
@@ -133,9 +171,9 @@ renderImagePreview = () => {
     if(this.state.image_preview){
         return(
             
-               <> 
-            <img alt="img-preview" className="catch-img-preview" src={this.state.image_preview}></img>
-            <button className="image-preview-delete-button" onClick={e => this.unselectImage(e)}>-</button>
+            <> 
+                <img alt="img-preview" className="catch-img-preview" src={this.state.image_preview}></img>
+                <button className="image-preview-delete-button" onClick={e => this.unselectImage(e)}>-</button>
             </>
         )
     }
@@ -145,9 +183,9 @@ renderImagePreview = () => {
 
 
 selectedSpeciesName = () => {
+
     if(this.state.species_id){
-        let spec = this.props.species.find(spec => spec.id == this.state.species_id)
-      
+        let spec = this.props.species.find(spec => spec.id === parseInt(this.state.species_id))
        return spec.name
     }
 
@@ -156,12 +194,33 @@ selectedSpeciesName = () => {
 
 selectedBaitName = () => {
     if(this.state.bait_id){
-        let bait = this.props.baits.find(bait => bait.id == this.state.bait_id)
+        let bait = this.props.baits.find(bait => bait.id === parseInt(this.state.bait_id))
       
        return bait.name
     }
 
 }
+
+renderDateGuess = () => {
+    if(this.state.guessed_date){
+        console.log(this.state.guessed_date)
+        return(
+            <>
+            <p>{String(this.state.guessed_date)}</p>
+            <p>Is this when you caught it?</p>
+            <button onClick={e => this.correctGuess(e)}>Yes</button><button>No</button>
+            <br />
+            </>
+        )
+    }
+}
+
+correctGuess = (e) => {
+    e.preventDefault();
+     this.setState({date: this.state.guessed_date})
+}
+
+
 
     render(){
         return(
@@ -185,7 +244,7 @@ selectedBaitName = () => {
                 
                     
                     <br />
-                    <input type="file" accept="image/*" multiple={false} name="image" onChange={e => this.fileSelectHandler(e)}/>
+                    <input id="file-input" type="file" accept="image/*" multiple={false} name="image" onChange={e =>  this.fileSelectHandler(e)}/>
                   
                  
             <br />
@@ -199,7 +258,11 @@ selectedBaitName = () => {
                 </select>
 
                 <br />
+
                 <br />
+                <label htmlFor="date">Date: </label>
+                {this.renderDateGuess()}
+                <input type="date" name="date" id="date-input" style={{display: ""}} onChange={(e) => this.handleOnChange(e)} value={this.state.date} />
 
                 <label htmlFor="bait_id">Bait: </label>
 

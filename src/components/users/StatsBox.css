@@ -1,0 +1,15 @@
+.stats-box{
+  /*  background-color: khaki;*/
+    
+    height: 33px;
+    border-right: solid black 1px;
+    border-left: solid black 1px;
+    border-bottom: solid black 1px;
+    display: flex;
+}
+
+.stat-box{
+    padding: 9px;
+    border-right: solid black 1px;
+    border-left: solid black 1px;
+}
