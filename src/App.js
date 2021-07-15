@@ -6,15 +6,17 @@ import './App.css'
 import axios from 'axios'
 import NavBarContainer from './containers/NavBarContainer'
 import { connect } from 'react-redux'
-import { userLogin, userLogout, userRegister} from './actions/userActions'
+import { userLogin, userLogout, userRegister, getAllUsers} from './actions/userActions'
 import  { getSpecies } from './actions/speciesActions.js'
 import  { getBaits } from './actions/baitActions.js'
 import  { getSpots } from './actions/spotActions.js'
+import LoginContainer from './containers/LoginContainer.js'
+import RegistrationContainer from './containers/RegistrationContainer.js'
 import Catches from './components/catches/Catches.js'
 import CatchInput from './components/catches/CatchInput.js'
 //import { StatsBox } from './components/users/StatsBox';
 import AuxNavBar from './containers/AuxNavBar.js'
-
+import User from './components/users/User.js'
 //import { getUserCatches } from './actions/catchActions.js'
 
 
@@ -28,6 +30,7 @@ class App extends Component{
     user: {},
     redirect: false,
     userCatches: [],
+    allUser: [],
     
   }
 
@@ -38,7 +41,6 @@ class App extends Component{
 checkLoginStatus = () =>{
   axios.get('http://localhost:3000/logged_in', {withCredentials: true})
   .then(resp => {
-    console.log("first user: ",resp.data.user)
    
       if(resp.data.logged_in === true && this.state.loggedInStatus === "NOT_LOGGED_IN"){
           
@@ -83,11 +85,13 @@ checkLoginStatus = () =>{
     return unescape(document.cookie.split('=')[1])
   }
 
+  
   handelLogin = (data) => {
     
     this.setState({
       loggedInStatus: "LOGGED_IN",
       user: data,
+      redirect: false,
     })
   }
 
@@ -111,6 +115,8 @@ checkLoginStatus = () =>{
   }
 
 
+
+
   updateCatches = (newCatch) => {
     this.setState({
       userCatches: [...this.state.userCatches, newCatch]
@@ -120,10 +126,11 @@ checkLoginStatus = () =>{
 
   componentDidMount(){
     this.checkLoginStatus()
-  // this.props.checklogin();
    this.props.getSpecies();
    this.props.getSpots();
    this.props.getBaits();
+   this.props.getAllUsers();
+
    //this.props.getUserCatches(this.props.user.id);
  
 
@@ -131,7 +138,7 @@ checkLoginStatus = () =>{
 
   renderAuxNav = () => {
     if(this.state.loggedInStatus === "LOGGED_IN"){
-      return <AuxNavBar />
+      return <AuxNavBar currentUser={this.state.user} />
     }
     
   }
@@ -157,10 +164,14 @@ checkLoginStatus = () =>{
             <Route exact path={"/"}  render={props => (
                <Home {...props} handelLogin={this.handelLogin}  loggedInStatus={this.state.loggedInStatus} userLogin={this.props.userLogin}  getCSRFToken={this.getCSRFToken} />
             )}  />
+
+            <Route exact path="/login" render={props => <LoginContainer {...props} redirect={this.state.redirect} getCSRFToken={this.getCSRFToken} handelLogin={this.handelLogin} userLogin={this.props.userLogin} />}/>
+            <Route exact path="/register" render={props => <RegistrationContainer {...props} redirect={this.state.redirect} getCSRFToken={this.getCSRFToken} userLogin={this.props.userLogin} handelLogin={this.handelLogin} />}/>
             
             <Route exact path={"/dashboard"} render={props => <DashboardContainer {...props} redirect={this.state.redirect} spots={this.props.spots} baits={this.props.baits} species={this.props.species}  user={this.state.user} loggedInStatus={this.state.loggedInStatus} userCatches={this.state.userCatches}  updateCatches={this.updateCatches} /*catches={this.props.user.catches}*/ /> } />
             <Route exact path={"/mycatches"} render={props => <Catches {...props}  redirect={this.state.redirect}  user={this.state.user} uid = {this.state.user.id} catches={this.state.userCatches}    /> } />
             <Route path={"/newCatch"} render={props => <CatchInput {...props} redirect={this.state.redirect} uid={this.state.user.id} />} />
+            <Route path={`/users/:id`} render={props => <User {...props} redirect={this.state.redirect} />} />
           </Switch>
           </BrowserRouter>
           
@@ -176,12 +187,14 @@ checkLoginStatus = () =>{
 }
 
 const mapStateToProps = state => {
+ 
   return{
    // loggedInStatus: state.userStatus.loggedInStatus,
   //  user: state.userStatus.user,
     species: state.species.all_species,
     spots: state.spots.all_spots,
     baits: state.baits.all_baits,
+    allUsers: state.userStatus.allUsers
   }
   
 }
@@ -197,6 +210,7 @@ return {
   getSpecies: () =>  dispatch(getSpecies()),
   getBaits: () => dispatch(getBaits()),
   getSpots: () => dispatch(getSpots()),
+  getAllUsers: () => dispatch(getAllUsers()), 
   //getUserCatches: (uid) => dispatch(getUserCatches(uid))
 }
 }

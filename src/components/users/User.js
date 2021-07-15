@@ -1,28 +1,52 @@
 
 import React, { Component } from 'react';
-import CatchBox from '../catches/CatchBox';
-import cuid from 'cuid'
+import { connect } from "react-redux";
+import Catches from '../catches/Catches';
+//import StatsBox from './StatsBox';
+//import CatchBox from '../catches/CatchBox';
+//import cuid from 'cuid'
 
 class User extends Component{
-
-   // let name = this.props.user.username;
-   renderName = () => {
-    if(this.props.user.username){
-        return  <h2 className="user-name">{`${this.props.user.username}`.toUpperCase()}</h2>
+    state = {
+        user_id: this.props.match.params.id,
+        is_fetched: false,
+        user: {},
     }
+   
+
+  async componentDidMount(){
+     
+       const user = await fetch(`http://localhost:3000/api/v1/users/${this.state.user_id}`).then(resp => resp.json())
+       this.setState({user: user, is_fetched: true})
    }
 
 
-   renderCatches = () => {
-    
-    return (this.props.user.catches ? this.props.user.catches.map(caught => <li key={cuid()} > {CatchBox(caught)} </li>) : <h3>No Catches Logged</h3>)
-    }
+    renderUserInfo = () => {
+     //  const user = this.find_user()
+        if(this.state.is_fetched){
+            return (
+                <div>
+                <h1>{this.state.user.username}</h1>
+               
+                <Catches redirect={this.props.redirect}  user={this.state.user} uid = {this.state.user.id} species={this.state.user.species} catches={this.state.user.catches}  />
+                </div>
 
+    
+            )
+        } else {
+            <h2>...Loading</h2>
+        }
+
+    }
+    
     render(){
+       
         return(
+            
             <div className="user-div">
-               <h2>USER DIV</h2>
-                {this.renderName()}
+             
+             {this.renderUserInfo()}
+               
                
             </div>
         )
@@ -33,4 +57,11 @@ class User extends Component{
 
 }
 
-export default User;
+
+const mapStateToProps = (state) => {
+    return{
+        allUsers: state.userStatus.allUsers,
+    }
+}
+
+export default connect(mapStateToProps)(User);

@@ -107,3 +107,14 @@ export function userRegister(newUser){
     }   
 }
 
+
+
+export function getAllUsers(){
+    return (dispatch) => {
+        fetch("http://localhost:3000/api/v1/users")
+        .then(resp => resp.json())
+        .then(obj => {
+          dispatch({type: "GET_ALL_USERS", allUsers: obj})
+        })
+      }
+}

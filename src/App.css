@@ -4,7 +4,36 @@
     font-family: 'M PLUS Rounded 1c', sans-serif;
 }
 
+a{
+  text-decoration: none;
+}
 
+/*
+#home-page{
+  background-image: url("/home/austin/projects/fish-in-sight/fish-in-sight-frontend/src/fishing-sunset-orange.jpg");
+  background-size: 80%;
+  background-repeat: no-repeat;
+}
+*/
+
+.log-container{
+  width: 333px;
+  position:relative;
+  margin: auto;
+  margin-top: 63px;
+
+}
+
+.reg-container{
+  width: 333px;
+  position:relative;
+  margin: auto;
+  margin-top: 63px;  
+}
+
+.error{
+  color: red;
+}
 .nav-bar-container{
     margin: 0%;
     border-bottom: 1px solid black;

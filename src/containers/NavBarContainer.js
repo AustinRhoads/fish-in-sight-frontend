@@ -13,10 +13,13 @@ function NavBarContainer(props){
 
   const  renderUser = () => {
         if(props.loggedInStatus === "LOGGED_IN"){
-            return <><a href="/dashboard" className= "nav-link user-link right-1">{props.user.username}</a>
+            return <><a href={`/users/${props.user.id}`} className= "nav-link user-link right-1">{props.user.username}</a>
             <a href="/" className= "nav-link user-link right-2" onClick={() => logout()}>Logout</a></>
         } else {
-            return <><a href = "/" className= "nav-link right-2">Login</a></>
+            return <>
+            <a href = "/login" className= "nav-link right-1">Login</a>
+            <a href = "/register" className="nav-link user-link right-2">Register</a>
+            </>
         }
     }
 

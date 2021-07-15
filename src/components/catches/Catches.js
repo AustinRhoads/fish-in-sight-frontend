@@ -36,18 +36,18 @@ const [filteredList, setFilteredList] = useState(null)
 
            
     if(!filterOn){
-        if(props.catches && props.catches.length > 0){
-                
+        if(props.catches && props.catches.length > 0){     
             return  props.catches.map(caught => caught.image ?  <li key={cuid()} > <CatchBox uid={caught.user_id} caught={caught} /> </li> : null )
-        } else if(props.catches.length = 0){
+        
+        } else if(props.catches.length === 0){
             return <h3>No Catches Logged Yet</h3>
-        }else {
-            return <h3>   ...Loading</h3>
+        
         }
+    
     } else {
-        if(filteredList && filteredList.length > 0){
-                
+        if(filteredList && filteredList.length > 0){       
             return  filteredList.map(caught => caught.image ?  <li key={cuid()} > <CatchBox uid={caught.user_id} caught={caught} /> </li> : null )
+        
         }else {
             return <h3>No Matching Catches</h3>
         }
@@ -63,7 +63,7 @@ const [filteredList, setFilteredList] = useState(null)
 const checkLogin = () => {
     
     if(props.redirect){
-        console.log("logged out")
+      
         return <Redirect to="/" />
      
     }
@@ -71,8 +71,8 @@ const checkLogin = () => {
 }
 
 const renderStats = () => {
-    if(props.user && props.user.species){
-      
+    if(props.user && props.user.species && props.user.catches){
+      console.log(props)
         return(
             <StatsBox catchesCount={props.catches.length} speciesCount={props.user.species.length} user={props.user} />
         )

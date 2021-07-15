@@ -1,12 +1,10 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { withRouter } from 'react-router-dom';
+
 
 
 class Login extends Component {
 
     state = {
-        username: "",
         password: "",
         email: "",
         loginErrors: "",
@@ -19,21 +17,16 @@ class Login extends Component {
         e.preventDefault()
         const {
             email,
-            username,
             password,
         } = this.state
 
         const userLoggingIn = { 
             user: {
-                email: email,
-                username: username,
+                email: email.toLowerCase(),
                 password: password,
             }
         }
   
-
-       // this.props.userLogin(userLoggingIn)
-       // this.props.history.push('/dashboard')
        const configObject = {
         method: "POST",
         credentials: 'include',
@@ -51,6 +44,9 @@ class Login extends Component {
             console.log(resp.user)
            this.props.handelSuccessfulAuth(resp.user)
            this.props.userLogin(userLoggingIn)
+        } else {
+            this.props.setError(resp.error)
+            console.log(resp.error)
         }
     })
     .catch(error =>{
@@ -70,8 +66,7 @@ class Login extends Component {
         return(
             <div>
                 <form onSubmit={e => this.handelOnSubmit(e)}>
-                    <input type="text" name="username" value={this.state.username} placeholder="username" onChange={e => this.handelOnChange(e)} />
-                    <br />
+
                     <input type="text" name="email" value={this.state.email} placeholder="email" onChange={e => this.handelOnChange(e)} required />
                     <br />
                     <input type="password" name="password" placeholder="password" value = {this.state.password} onChange={e => this.handelOnChange(e)} required/>
@@ -83,10 +78,6 @@ class Login extends Component {
     }
 }
 
-const mapDispatchToProps = dispatch => {
-    return{
-       
-    }
-}
 
-export default connect(null, mapDispatchToProps) (withRouter(Login));
+
+export default Login;

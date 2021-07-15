@@ -9,6 +9,7 @@ function AuxNavBar(){
         <div className="aux-nav">
             <a href="/mycatches">MY CATCHES</a>
             <a href="/newCatch">NEW CATCH</a>
+            
         </div>
     )
 }

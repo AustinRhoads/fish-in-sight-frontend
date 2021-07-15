@@ -49,10 +49,10 @@ class Home extends Component {
 
     render(){
         return(
-            <div>
+            <div id="home-page">
 
-           {this.renderAppropriatePage()}
-           <h2>STATUS: {this.props.loggedInStatus}</h2>
+           {/*this.renderAppropriatePage()*/}
+           
             </div>
         )
     }

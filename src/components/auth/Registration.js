@@ -49,6 +49,8 @@ class Registration extends Component {
                 console.log(resp)
                 this.props.handelSuccessfulAuth(resp.user)
               //  this.props.userLogin(resp.user)
+            } else {
+                this.setErrors(resp.error)
             }
             console.log("registration res", resp);
         }).catch(error =>{
