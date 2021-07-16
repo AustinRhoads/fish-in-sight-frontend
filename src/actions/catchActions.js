@@ -53,3 +53,13 @@ export function filterUserCatches(filtered){
         dispatch({type: "SET_FILTERED_USER_CATCHES", filtered: filtered})
     }
 }
+
+export function getAllCatches(){
+    return(dispatch) => {
+        fetch("http://localhost:3000/api/v1/catches")
+        .then(resp => resp.json())
+        .then(obj => {
+            dispatch({type: "GET_ALL_CATCHES", allCatches: obj})
+        })
+    }
+}

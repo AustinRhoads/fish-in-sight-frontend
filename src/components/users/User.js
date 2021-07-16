@@ -1,7 +1,7 @@
 
 import React, { Component } from 'react';
 import { connect } from "react-redux";
-import Catches from '../catches/Catches';
+import UserCatches from '../catches/UserCatches';
 //import StatsBox from './StatsBox';
 //import CatchBox from '../catches/CatchBox';
 //import cuid from 'cuid'
@@ -18,6 +18,10 @@ class User extends Component{
      
        const user = await fetch(`http://localhost:3000/api/v1/users/${this.state.user_id}`).then(resp => resp.json())
        this.setState({user: user, is_fetched: true})
+
+       let auxnav = document.body.querySelector('div.aux-nav')
+       
+       auxnav.style.display = "block";
    }
 
 
@@ -28,7 +32,7 @@ class User extends Component{
                 <div>
                 <h1>{this.state.user.username}</h1>
                
-                <Catches redirect={this.props.redirect}  user={this.state.user} uid = {this.state.user.id} species={this.state.user.species} catches={this.state.user.catches}  />
+                <UserCatches redirect={this.props.redirect}  user={this.state.user} uid = {this.state.user.id} species={this.state.user.species} catches={this.state.user.catches}  />
                 </div>
 
     

@@ -1,11 +1,14 @@
 .aux-nav{
     height: 33px;
-    border-right: solid black 1px;
+   /* border-right: solid black 1px;*/
     border-left: solid black 1px;
+    width: 700px;
+    margin: auto;
 }
 
 .aux-nav a{
     padding: 9px;
+    padding-left: 33px;
     text-decoration: none;
     border-right: solid black 1px;
 }

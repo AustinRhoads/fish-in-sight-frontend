@@ -220,10 +220,46 @@ correctGuess = (e) => {
      this.setState({date: this.state.guessed_date})
 }
 
-
+ 
 
     render(){
         return(
+        <div>
+            <div id="hsdci" className="catch-input-horizontal-scroll">
+                <div id="slide1" className="input-box-horizontal-scroll">  
+                    <h3>Select Image</h3>
+                    <a className="next-button" href="#slide2">next</a>
+                </div>
+                <div id="slide2" className="input-box-horizontal-scroll">
+                    
+                <h3>Species</h3>
+                    <a className="next-button" href="#slide3">next</a>
+                    
+                </div>
+                <div id="slide3" className="input-box-horizontal-scroll">
+                
+                <h3>Comment</h3>
+                    <a className="next-button" href="#slide4">next</a>
+
+                </div>
+                <div id="slide4" className="input-box-horizontal-scroll">
+                <h3>Is This When You Caught It?</h3>
+                    
+                    <a className="next-button" href="#slide5">next</a>
+
+                </div>
+                <div id="slide5" className="input-box-horizontal-scroll">
+                <h3>Location</h3>
+                    
+                    <a className="next-button" href="#slide6">next</a>
+
+                </div>
+                <div id="slide6" className="input-box-horizontal-scroll">
+                <h3>Bait</h3>
+                    <a className="next-button" href="#slide1">next</a>
+
+                </div>
+            </div>
             <div className="new-catch-div">
                 <h2>New Catch</h2>
                 <br />
@@ -294,6 +330,7 @@ correctGuess = (e) => {
                     <input type="submit" value="LOG CATCH" />
                 </form>
             </div>
+        </div>
         )
     }
 }

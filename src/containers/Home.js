@@ -14,7 +14,8 @@ class Home extends Component {
         return unescape(document.cookie.split('=')[1])
       }
       componentDidMount(){
-         
+        let auxnav = document.body.querySelector('div.aux-nav')
+        auxnav.style.display = "none";
       }
 
     handelSuccessfulAuth = (data) => {  

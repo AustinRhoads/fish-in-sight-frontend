@@ -7,6 +7,11 @@ class RegistrationContainer extends Component{
         registrationErrors: "",
     }
 
+    componentDidMount(){
+        let auxnav = document.body.querySelector('div.aux-nav')
+        auxnav.style.display = "none";
+    }
+
     handelSuccessfulAuth = (data) => {  
         this.props.handelLogin(data);
         this.props.history.push(`/users/${data.id}`)
