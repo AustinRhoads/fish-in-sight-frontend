@@ -17,6 +17,7 @@
     "google-map-react": "^2.1.10",
     "google-maps-react": "^2.0.6",
     "ml5": "^0.6.1",
+    "piexifjs": "^1.0.6",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-geocode": "^0.2.3",

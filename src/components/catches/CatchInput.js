@@ -1,8 +1,10 @@
 import cuid from 'cuid';
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-//import EXIF from 'exif-js';
+import EXIF from 'exif-js';
 //import {ExifImage} from 'exif'
+//import piexif from 'piexifjs'
+
 
 
 /*
@@ -23,7 +25,9 @@ class CatchInput extends Component {
         image: null,
         image_preview: null,
         date: "",
+        time: "",
         guessed_date: "",
+
     }
 
 
@@ -123,37 +127,39 @@ renderSpotsOptions = () => {
 
 fileSelectHandler = (e) => {
     
-        this.timeExtract(e);
+      
  
         if(e.target.files[0]){
+         this.exifExtractor(e.target.files[0]);
          this.setState({image: e.target.files[0], image_preview: URL.createObjectURL(e.target.files[0])})
     }
    
     
 }
 
-timeExtract = (e) => {
+
+
+
+exifExtractor = (file) => {
+    const scope = this;
+    var reader = new FileReader();
+    reader.onload = function(e) {
+
+      var exif = EXIF.readFromBinaryFile(this.result);
+      console.log(exif)
+      var  datetime = String(exif.DateTime).split(" ")
+      var date = datetime[0].replace(/:/g, "-")
+      var time = datetime[1]
+      scope.setState({date: date, time: time})
+        console.log(datetime);
+        
+        
+        
+
+     }
+
+    reader.readAsArrayBuffer(file);
     
-
-    if(e.target.files[0]){
-        const file = e.target.files[0];
-        console.log(file)
-        this.setState({guessed_date: file.lastModifiedDate})
-      
- 
-       /*
-      EXIF.getData(e.target.files[0], function(){ 
-             const dataz =  EXIF.getAllTags(this);
-            document.getElementById("date-input").value =dataz.DateTime
-
-           })
-           */
-        
-        
-
-    }
-        
-
 }
 
 
@@ -220,46 +226,132 @@ correctGuess = (e) => {
      this.setState({date: this.state.guessed_date})
 }
 
+selectActiveA = () => {
+    const sections = document.getElementsByClassName("input-box-horizontal-scroll")
+    const dots = document.getElementsByClassName('dot')
+    const scrollWindow = document.getElementById("hsdci")
+    
+   // scrollWindow.addEventListener("scroll", () => {
+   //     let current = "";
+   // })
+   if(scrollWindow){
+       scrollWindow.addEventListener("scroll", () => {
+           let current = "";
+           //sections.forEach( el => {
+           //    const sectionLeft = el.offsetLeft;
+           //    console.log(sectionLeft)
+           //})
+           const winLeft = scrollWindow.scrollLeft
+         // console.log(winLeft)
+           for(var x = sections.length - 1; x >=0; x--){
+                const sectionLeft = sections[x].offsetLeft;
+                const sectionWidth = sections[x].clientWidth;
+                if(sectionLeft <= winLeft + 20 && sectionLeft >= winLeft - sectionWidth ){
+                    current = sections[x].getAttribute("id");
+                   // document.querySelector(`a.${sections[x].getAttribute("id")}`).classList.add('active')
+                }
+               
+
+           }
+           
+           
+           for(let x = dots.length - 1; x >= 0; x--){
+               dots[x].classList.remove("active")
+               if(dots[x].classList.contains(current)){
+                   dots[x].classList.add("active")
+               }
+           }
+       })
+   }
+}
+
  
 
     render(){
+        this.selectActiveA()
         return(
         <div>
-            <div id="hsdci" className="catch-input-horizontal-scroll">
-                <div id="slide1" className="input-box-horizontal-scroll">  
-                    <h3>Select Image</h3>
-                    <a className="next-button" href="#slide2">next</a>
-                </div>
-                <div id="slide2" className="input-box-horizontal-scroll">
-                    
-                <h3>Species</h3>
-                    <a className="next-button" href="#slide3">next</a>
-                    
-                </div>
-                <div id="slide3" className="input-box-horizontal-scroll">
+            <form className="scrollable-catch-input" onSubmit={ e => this.handleOnSubmit(e)}>
+            <div className= "outer-box">   
+                <div id="hsdci" className="catch-input-horizontal-scroll">
+                    <div id="slide1" className="input-box-horizontal-scroll"> 
+
+                        <h3>Select Image</h3>
+
+                        <div className="image-preview-div" style={{height: 220, width: 220}} >
+                            {this.renderImagePreview()}
+                        </div>
+
+                        <input id="file-input" type="file" accept="image/*" multiple={false} name="image" onChange={e =>  this.fileSelectHandler(e)}/>
+                        
+                        <a className="next-button" href="#slide2">next</a>
+
+                    </div>
+
+                    <div id="slide2" className="input-box-horizontal-scroll">
+
+                    <h3>Confirm the time and date of your catch.</h3>
+                  
+                  
+                <input type="date" name="date" id="date-input" style={{display: ""}} onChange={(e) => this.handleOnChange(e)} value={this.state.date} />
+                <input type="time" name="time" onChange={e => this.handleOnChange(e)} value={this.state.time} />
                 
-                <h3>Comment</h3>
-                    <a className="next-button" href="#slide4">next</a>
+                        <a className="next-button" href="#slide3">next</a>
 
-                </div>
-                <div id="slide4" className="input-box-horizontal-scroll">
-                <h3>Is This When You Caught It?</h3>
+                    </div>
+                    <div id="slide3" className="input-box-horizontal-scroll">
+
+                    <h3>Location</h3>
+                   
+                        <a className="next-button" href="#slide4">next</a>
+
+                    </div>
+                    <div id="slide4" className="input-box-horizontal-scroll">
+
+                    <h3>Species</h3>
+
+                        <a className="next-button" href="#slide5">next</a>
+
+                    </div>
+                    <div id="slide5" className="input-box-horizontal-scroll">
+
+                    <h3>Add Measurements</h3>
                     
-                    <a className="next-button" href="#slide5">next</a>
+                        <a className="next-button" href="#slide6">next</a>
 
-                </div>
-                <div id="slide5" className="input-box-horizontal-scroll">
-                <h3>Location</h3>
+                    </div>
+                    <div id="slide6" className="input-box-horizontal-scroll">
+
+                    <h3>Bait</h3>
+                        <a className="next-button" href="#slide7">next</a>
+
+                    </div>
+                    <div id="slide7" className="input-box-horizontal-scroll">
+                    <h3>Description</h3>
                     
-                    <a className="next-button" href="#slide6">next</a>
+                        <a className="next-button" href="#slide1">next</a>
+
+                    </div>
+
+
 
                 </div>
-                <div id="slide6" className="input-box-horizontal-scroll">
-                <h3>Bait</h3>
-                    <a className="next-button" href="#slide1">next</a>
 
+
+                <div className="dot-div">
+                    <div  ><a className="dot d1 slide1 active" href="#slide1" >.</a></div>
+                    <div  ><a className="dot d2 slide2" href="#slide2" >.</a></div>
+                    <div  ><a className="dot d3 slide3" href="#slide3" >.</a></div>
+                    <div  ><a className="dot d4 slide4" href="#slide4" >.</a></div>
+                    <div  ><a className="dot d5 slide5" href="#slide5" >.</a></div>
+                    <div  ><a className="dot d6 slide6" href="#slide6" >.</a></div>
+                    <div  ><a className="dot d7 slide7" href="#slide7" >.</a></div>
                 </div>
-            </div>
+            </div> 
+            </form>
+
+{/*         //////////////////////           here is the great devide               //////////////////////////              */}
+
             <div className="new-catch-div">
                 <h2>New Catch</h2>
                 <br />

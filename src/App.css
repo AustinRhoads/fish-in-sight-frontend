@@ -172,7 +172,7 @@ hr.solid {
     position: relative;
     width: 700px;
     height: 500px;
-    background-color: salmon;
+    background-color: rgb(58, 184, 184);
     margin: auto;
     display: grid;
     grid-template-columns: repeat(auto-fill,minmax(682px,1fr));
@@ -190,6 +190,62 @@ hr.solid {
     height: 480px;
    
     border: solid black 1px;
+  }
+  .outer-box{
+    position: relative;
+    height: 480px;
+  }
+
+  .dot-div{
+    position: absolute;
+    width: 150px;
+    height: 50px;
+   left: calc(50% - 75px);
+   top: 85%;
+   z-index: 33;
+  }
+
+  .dot{
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: blanchedalmond;
+    color: rgb(0,0,0,0);
+    transition: transform 400ms;
+    top: 1px;
+    
+  }
+  .dot.active{
+    transform: translate3d(0em, -0.5em, 0em) ;
+   
+    width: 15px;
+    height: 15px;
+    top: -1px;
+    
+  }
+  .d1{
+    left: 0px;
+  }
+  .d2{
+    left: 25px;
+  }
+  .d3{
+    left: 50px;
+
+  }
+  .d4{
+    left: 75px;
+  }
+  .d5{
+    left: 100px;
+
+  }
+  .d6{
+    left: 125px;
+  }
+  .d7{
+    left: 150px;
   }
 
   .new-catch-form{
