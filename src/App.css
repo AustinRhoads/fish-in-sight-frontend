@@ -181,6 +181,7 @@ hr.solid {
     grid-gap: 18px;
     overflow-x: auto;
     scroll-behavior: smooth;
+    border-radius: 20px;
   }
 
   .input-box-horizontal-scroll{
@@ -201,7 +202,7 @@ hr.solid {
     width: 150px;
     height: 50px;
    left: calc(50% - 75px);
-   top: 85%;
+   top: 95%;
    z-index: 33;
   }
 
@@ -247,6 +248,9 @@ hr.solid {
   .d7{
     left: 150px;
   }
+  .d8{
+    left: 175px;
+  }
 
 
 
@@ -258,11 +262,15 @@ hr.solid {
   .center-marker{
     position: absolute;
     
-    width: 50px;
-    height: 50px;
-    left: calc(50% - 25px);
-    top: calc(50% - 25px);
-    background-color: rosybrown;
+    width: 30px;
+    height: 30px;
+    left: calc(50% - 15px);
+    top: calc(50% - 15px);
+    /*background-color: rgba(188, 143, 143, 0.514);*/
+    background-image: url('/home/austin/projects/fish-in-sight/fish-in-sight-frontend/src/target.png');
+    background-size: 30px 30px;
+
+    background-repeat: no-repeat;
     z-index: 33;
   }
 
@@ -303,6 +311,7 @@ hr.solid {
     right: 0px;
     border-radius: 3px;
     background-color: rgba(253, 252, 252);
+    background-position: 10px, 10px ;
     z-index: 2;
   }
   

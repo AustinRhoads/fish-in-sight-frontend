@@ -33,6 +33,8 @@ class CatchInput extends Component {
         image_preview: null,
         date: "",
         time: "",
+        lbs: "",
+        inches: "",
         guessed_date: "",
         center: {
             lat: 30.807042990766117, 
@@ -68,7 +70,10 @@ handleOnSubmit = (e) => {
    formData.append('spot_id', this.state.spot_id)
    formData.append('notes', this.state.notes)
    formData.append('image', this.state.image)
-   formData.append('date', this.state.date)
+   formData.append('date', [this.state.date, this.state.time].join(" "))
+   formData.append('size', this.state.inches)
+   formData.append('lat', this.state.center.lat)
+   formData.append('lng', this.state.center.lng)
     
 
    const configObject = {
@@ -86,13 +91,12 @@ handleOnSubmit = (e) => {
    .then(resp => resp.json())
    .then(resp => {
        console.log("catches res", resp);
-      // this.props.updateCatches(resp);
-     // this.props.updateCatches(resp)
    }).catch(error =>{
        console.log("catches error", error)
    });
 
    this.setState({
+    user_id: "",
     notes: "",
     species_id: "", 
     bait_id: "",
@@ -100,7 +104,16 @@ handleOnSubmit = (e) => {
     image: null,
     image_preview: null,
     date: "",
+    time: "",
+    lbs: "",
+    inches: "",
     guessed_date: "",
+    center: {
+        lat: 30.807042990766117, 
+        lng: -98.40859740107271,
+    },
+    zoom: 11,
+    key: "",
    })
 
 
@@ -392,6 +405,11 @@ handleMapChange = (center, zoom, bounds, marginBounds) => {
                     <div id="slide5" className="input-box-horizontal-scroll">
 
                     <h3>Add Measurements</h3>
+                        
+                        <label>Inches: </label>
+                        <input type="number" name="inches" onChange={e => this.handleOnChange(e)} value={this.state.inches}/>
+                        <label>Lbs:</label>
+                        <input type="number" name="lbs" onChange={e => this.handleOnChange(e)} value={this.state.lbs}/>
                     
                         <a className="next-button" href="#slide6">next</a>
 
@@ -412,7 +430,26 @@ handleMapChange = (center, zoom, bounds, marginBounds) => {
                     <h3>Description</h3>
 
                     <textarea className="catch-input-description" name="notes" value={this.state.notes} onChange={(e) => this.handleOnChange(e)} />
-                        <a className="next-button" href="#slide1">next</a>
+                        <a className="next-button" href="#slide8">next</a>
+
+                    </div>
+
+                    <div id="slide8" className="input-box-horizontal-scroll">
+                    <h3>Review</h3>
+                        <div className="image-preview-div" style={{height: 220, width: 220}} >
+                             {this.renderImagePreview()}
+                             <br />
+                        </div>
+                        <div>
+                            <h3>{this.selectedSpeciesName() }</h3>
+                            <h4>Lat: {this.state.center.lat}, Lng: {this.state.center.lng}</h4>
+                            <h4>Measurments: {this.state.lbs}Lbs, {this.state.inches}in.</h4>
+                            <h4>Caught with: {this.selectedBaitName() }</h4>
+                            <label>Description:</label>
+                            <p>{this.state.notes}</p>
+                        </div>
+                    
+                        <input type="submit" value="SAVE" />
 
                     </div>
 
@@ -429,82 +466,14 @@ handleMapChange = (center, zoom, bounds, marginBounds) => {
                     <div  ><a className="dot d5 slide5" href="#slide5" >.</a></div>
                     <div  ><a className="dot d6 slide6" href="#slide6" >.</a></div>
                     <div  ><a className="dot d7 slide7" href="#slide7" >.</a></div>
+                    <div  ><a className="dot d8 slide8" href="#slide8" >.</a></div>
                 </div>
             </div> 
             </form>
 
 {/*         //////////////////////           here is the great devide               //////////////////////////              */}
 
-            <div className="new-catch-div">
-                <h2>New Catch</h2>
-                <br />
-                <br />
-                <form className="new-catch-form" onSubmit={ e => this.handleOnSubmit(e)}>
-                <div className="whaaaaa" style={{height: 380, width: 220}}>
-                <div className="image-preview-div" style={{height: 220, width: 220}} >
-                     {this.renderImagePreview()}
-                     <br />
-
-                </div>
-                <div className="new-catch-selected-attributes-box">
-                     <h3>{this.selectedSpeciesName()}</h3>
-                     <h3>{this.selectedBaitName()}</h3>
-                    
-                     </div>
-                </div>
-                
-                    
-                    <br />
-                    <input id="file-input" type="file" accept="image/*" multiple={false} name="image" onChange={e =>  this.fileSelectHandler(e)}/>
-                  
-                 
-            <br />
-            <br/>
-                    <label htmlFor="species">Species: </label>
-
-                <select name="species_id" value={this.state.species_id} onChange={(e) => this.handleOnChange(e)} placeholder="choose a species">
-                   
-                    <option disabled value=""> -- select a species -- </option>
-                    {this.renderSpeciesOptions()}
-                </select>
-
-                <br />
-
-                <br />
-                <label htmlFor="date">Date: </label>
-                {this.renderDateGuess()}
-                <input type="date" name="date" id="date-input" style={{display: ""}} onChange={(e) => this.handleOnChange(e)} value={this.state.date} />
-
-                <label htmlFor="bait_id">Bait: </label>
-
-                <select name="bait_id" value={this.state.bait_id} onChange={(e) => this.handleOnChange(e)} placeholder="choose bait">
-                    
-                <option disabled value=""> -- which bait did you use -- </option>
-                    {this.renderBaitsOptions()}
-                </select>
-
-                <br />
-                <br />
-
-                <label htmlFor="spot_id">Known Location:</label>
-                <select name="spot_id" value={this.state.spot_id} onChange={(e) => this.handleOnChange(e)} placeholder="choose a location">
-                    
-                    <option disabled value=""> -- select from known spots -- </option>
-                    {this.renderSpotsOptions()}
-                </select>
-
-                <br />
-                <br />
-
-                <label htmlFor="notes">Notes: </label>
-                <br />
-                    <textarea name="notes" value={this.state.notes} onChange={(e) => this.handleOnChange(e)} />
-                    <br />
-                   
-                   <br />
-                    <input type="submit" value="LOG CATCH" />
-                </form>
-            </div>
+           
         </div>
         )
     }
