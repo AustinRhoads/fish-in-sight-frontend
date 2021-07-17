@@ -335,35 +335,36 @@ handleMapChange = (center, zoom, bounds, marginBounds) => {
                 <div id="hsdci" className="catch-input-horizontal-scroll">
                     <div id="slide1" className="input-box-horizontal-scroll"> 
 
-                        <h3>Select Image</h3>
+                        <h3 className="slide-title">Select Image</h3>
 
-                        <div className="image-preview-div" style={{height: 220, width: 220}} >
+                        <div className="image-preview-div" style={{height: 340, width: 340}} >
                             {this.renderImagePreview()}
                         </div>
                         <br />
 
                         <input id="file-input" type="file" accept="image/*" multiple={false} name="image" onChange={e =>  this.fileSelectHandler(e)}/>
                         <br />
+                        
                         <a className="next-button" href="#slide2">next</a>
 
                     </div>
 
                     <div id="slide2" className="input-box-horizontal-scroll">
 
-                    <h3>Confirm the time and date of your catch.</h3>
+                    <h3 className="slide-title">Confirm the time and date of your catch.</h3>
                   
                   
                 <input type="date" name="date" id="date-input" style={{display: ""}} onChange={(e) => this.handleOnChange(e)} value={this.state.date} />
                 <input type="time" name="time" onChange={e => this.handleOnChange(e)} value={this.state.time} />
-                
+                        <a className="back-button" href="#slide1">Back</a>
                         <a className="next-button" href="#slide3">next</a>
 
                     </div>
                     <div id="slide3" className="input-box-horizontal-scroll">
 
-                    <h3>Location</h3>
+                    <h3 className="slide-title">Location</h3>
 
-            <p>Lat: {this.state.center.lat} Lng: {this.state.center.lng}</p>
+            <p className="lat-lng">Lat: {this.state.center.lat} Lng: {this.state.center.lng}</p>
                 <div className="catch-map">
                     <div className="center-marker"></div>
                  <GoogleMapReact
@@ -387,55 +388,58 @@ handleMapChange = (center, zoom, bounds, marginBounds) => {
 
                     </GoogleMapReact>
                     </div>
-                   
-                        <a className="next-button" href="#slide4">next</a>
+                        <a className="back-button" href="#slide2">Back</a>
+                        <a className="next-button" href="#slide4">Next</a>
 
                     </div>
                     <div id="slide4" className="input-box-horizontal-scroll">
 
-                    <h3>Species</h3>
+                    <h3 className="slide-title">Species</h3>
                     <select name="species_id" value={this.state.species_id} onChange={(e) => this.handleOnChange(e)} placeholder="choose a species">
                    
                    <option disabled value=""> -- select a species -- </option>
                    {this.renderSpeciesOptions()}
                </select>
+                        <a className="back-button" href="#slide3">Back</a>
                         <a className="next-button" href="#slide5">next</a>
 
                     </div>
                     <div id="slide5" className="input-box-horizontal-scroll">
 
-                    <h3>Add Measurements</h3>
+                    <h3 className="slide-title">Add Measurements</h3>
                         
                         <label>Inches: </label>
                         <input type="number" name="inches" onChange={e => this.handleOnChange(e)} value={this.state.inches}/>
-                        <label>Lbs:</label>
-                        <input type="number" name="lbs" onChange={e => this.handleOnChange(e)} value={this.state.lbs}/>
-                    
+                       
+                        <a className="back-button" href="#slide4">Back</a>
                         <a className="next-button" href="#slide6">next</a>
 
                     </div>
                     <div id="slide6" className="input-box-horizontal-scroll">
 
-                    <h3>Bait</h3>
+                    <h3 className="slide-title">Bait</h3>
 
                     <select name="bait_id" value={this.state.bait_id} onChange={(e) => this.handleOnChange(e)} placeholder="choose bait">
                     
                     <option disabled value=""> -- which bait did you use -- </option>
                         {this.renderBaitsOptions()}
                     </select>
+                        <a className="back-button" href="#slide5">Back</a>
                         <a className="next-button" href="#slide7">next</a>
 
                     </div>
                     <div id="slide7" className="input-box-horizontal-scroll">
-                    <h3>Description</h3>
-
-                    <textarea className="catch-input-description" name="notes" value={this.state.notes} onChange={(e) => this.handleOnChange(e)} />
+                    <h3 className="slide-title">Description</h3>
+                    <div>
+                        <textarea className="catch-input-description" name="notes" value={this.state.notes} onChange={(e) => this.handleOnChange(e)} />
+                    </div>    
+                        <a className="back-button" href="#slide6">Back</a>
                         <a className="next-button" href="#slide8">next</a>
 
                     </div>
 
                     <div id="slide8" className="input-box-horizontal-scroll">
-                    <h3>Review</h3>
+                    <h3 className="slide-title">Review</h3>
                         <div className="image-preview-div" style={{height: 220, width: 220}} >
                              {this.renderImagePreview()}
                              <br />
