@@ -248,6 +248,31 @@ hr.solid {
     left: 150px;
   }
 
+
+
+  .catch-map{
+    position: relative;
+    height: 300px;
+    width: 450px;
+  }
+  .center-marker{
+    position: absolute;
+    
+    width: 50px;
+    height: 50px;
+    left: calc(50% - 25px);
+    top: calc(50% - 25px);
+    background-color: rosybrown;
+    z-index: 33;
+  }
+
+
+.catch-input-description{
+  margin-left: calc(50% - 210px);
+  width: 420px;
+  height: 150px;
+}
+
   .new-catch-form{
     
       width: 500px;

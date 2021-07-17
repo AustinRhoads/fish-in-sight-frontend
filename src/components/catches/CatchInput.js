@@ -2,6 +2,13 @@ import cuid from 'cuid';
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import EXIF from 'exif-js';
+import GoogleMapReact from 'google-map-react';
+
+
+//import PlacesAutocomplete, {
+//    geocodeByAddress,
+//    getLatLng,
+//  } from 'react-places-autocomplete';
 //import {ExifImage} from 'exif'
 //import piexif from 'piexifjs'
 
@@ -27,6 +34,12 @@ class CatchInput extends Component {
         date: "",
         time: "",
         guessed_date: "",
+        center: {
+            lat: 30.807042990766117, 
+            lng: -98.40859740107271,
+        },
+        zoom: 11,
+        key: "",
 
     }
 
@@ -99,10 +112,35 @@ componentDidMount(){
         user_id: this.props.uid,
     })
 
+    this.setMyLocation();
     
    
 
 }
+
+setMyLocation = () => {
+          
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(position => {
+         
+          this.setState({
+            //  address: "",
+            center: {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude,
+            },
+            key: cuid(),
+           // newSpotLat: position.coords.latitude,
+           // newSpotLng: position.coords.longitude,
+            
+
+          })
+
+        })
+
+      }
+  }
+
 
 
 
@@ -147,11 +185,14 @@ exifExtractor = (file) => {
 
       var exif = EXIF.readFromBinaryFile(this.result);
       console.log(exif)
-      var  datetime = String(exif.DateTime).split(" ")
-      var date = datetime[0].replace(/:/g, "-")
-      var time = datetime[1]
-      scope.setState({date: date, time: time})
-        console.log(datetime);
+      if(exif.DateTime){
+        var  datetime = String(exif.DateTime).split(" ")
+        var date = datetime[0].replace(/:/g, "-")
+        var time = datetime[1]
+        scope.setState({date: date, time: time})
+          console.log(datetime);
+      }
+
         
         
         
@@ -265,6 +306,11 @@ selectActiveA = () => {
    }
 }
 
+
+handleMapChange = (center, zoom, bounds, marginBounds) => {
+   // console.log(center, zoom, bounds, marginBounds)
+    this.setState({center: center})
+}
  
 
     render(){
@@ -281,9 +327,10 @@ selectActiveA = () => {
                         <div className="image-preview-div" style={{height: 220, width: 220}} >
                             {this.renderImagePreview()}
                         </div>
+                        <br />
 
                         <input id="file-input" type="file" accept="image/*" multiple={false} name="image" onChange={e =>  this.fileSelectHandler(e)}/>
-                        
+                        <br />
                         <a className="next-button" href="#slide2">next</a>
 
                     </div>
@@ -302,6 +349,31 @@ selectActiveA = () => {
                     <div id="slide3" className="input-box-horizontal-scroll">
 
                     <h3>Location</h3>
+
+            <p>Lat: {this.state.center.lat} Lng: {this.state.center.lng}</p>
+                <div className="catch-map">
+                    <div className="center-marker"></div>
+                 <GoogleMapReact
+                    className="react-map"
+                    bootstrapURLKeys={{key: "AIzaSyDRKWLt8ylJe2kVLSnueiWtspn10ngk6iQ"}}
+                    defaultCenter={{ lat: 30.807042990766117, 
+                        lng: -98.40859740107271,}}
+                    defaultZoom={this.state.zoom}
+                    center={this.state.center}
+                    
+                   // onChange={({x, y, lat, lng, e}) => this.handleMapChange(x, y, lat, lng, e)}
+                   // onClick = {({x, y, lat, lng, event}) => this.handelMapClick(x, y, lat, lng, event)}
+                   onChange={({ center, zoom, bounds, marginBounds }) => {
+                       this.handleMapChange(center, zoom, bounds, marginBounds);
+                     // get the center, zoom, whatever using the ref
+                  }}
+                    key={this.state.key}
+                    >
+                        
+
+
+                    </GoogleMapReact>
+                    </div>
                    
                         <a className="next-button" href="#slide4">next</a>
 
@@ -309,7 +381,11 @@ selectActiveA = () => {
                     <div id="slide4" className="input-box-horizontal-scroll">
 
                     <h3>Species</h3>
-
+                    <select name="species_id" value={this.state.species_id} onChange={(e) => this.handleOnChange(e)} placeholder="choose a species">
+                   
+                   <option disabled value=""> -- select a species -- </option>
+                   {this.renderSpeciesOptions()}
+               </select>
                         <a className="next-button" href="#slide5">next</a>
 
                     </div>
@@ -323,12 +399,19 @@ selectActiveA = () => {
                     <div id="slide6" className="input-box-horizontal-scroll">
 
                     <h3>Bait</h3>
+
+                    <select name="bait_id" value={this.state.bait_id} onChange={(e) => this.handleOnChange(e)} placeholder="choose bait">
+                    
+                    <option disabled value=""> -- which bait did you use -- </option>
+                        {this.renderBaitsOptions()}
+                    </select>
                         <a className="next-button" href="#slide7">next</a>
 
                     </div>
                     <div id="slide7" className="input-box-horizontal-scroll">
                     <h3>Description</h3>
-                    
+
+                    <textarea className="catch-input-description" name="notes" value={this.state.notes} onChange={(e) => this.handleOnChange(e)} />
                         <a className="next-button" href="#slide1">next</a>
 
                     </div>
@@ -339,7 +422,7 @@ selectActiveA = () => {
 
 
                 <div className="dot-div">
-                    <div  ><a className="dot d1 slide1 active" href="#slide1" >.</a></div>
+                    <div  ><a className="dot d1 slide1" href="#slide1" >.</a></div>
                     <div  ><a className="dot d2 slide2" href="#slide2" >.</a></div>
                     <div  ><a className="dot d3 slide3" href="#slide3" >.</a></div>
                     <div  ><a className="dot d4 slide4" href="#slide4" >.</a></div>
