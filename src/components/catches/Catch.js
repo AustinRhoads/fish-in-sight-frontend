@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import GoogleMapReact from 'google-map-react';
+import CatchMarker from '../maps/CatchMarker';
 
 class Catch extends Component{
     state = {
@@ -54,7 +55,7 @@ class Catch extends Component{
             const center = {lat:  parseFloat(this.state.caught.lat), lng: parseFloat(this.state.caught.lng)}
             return(
                 <div className="catch-map">
-                <div className="center-marker"></div>
+                
              <GoogleMapReact
                 className="react-map"
                 bootstrapURLKeys={{key: "AIzaSyDRKWLt8ylJe2kVLSnueiWtspn10ngk6iQ"}}
@@ -68,8 +69,7 @@ class Catch extends Component{
               }}
                 
                 >
-                    
-
+                    <CatchMarker caught={this.state.caught} lat={this.state.caught.lat} lng={this.state.caught.lng} noPopup={true} />
 
                 </GoogleMapReact>
                 </div>

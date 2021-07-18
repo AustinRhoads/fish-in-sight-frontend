@@ -172,7 +172,9 @@ hr.solid {
     position: relative;
     width: 700px;
     height: 500px;
-    background-color: rgb(118, 199, 199);
+    background-color: rgb(33, 98, 240, 0.4);
+    border: solid rgb(33, 98, 240)  3px;
+   /* background-image: linear-gradient(to right, rgb(45, 145, 238), rgb(45, 238, 158));*/
     margin: auto;
     display: grid;
     grid-template-columns: repeat(auto-fill,minmax(682px,1fr));
@@ -187,6 +189,9 @@ hr.solid {
   .catch-input-horizontal-scroll  h4, h3{
     margin-top: 3px;
     margin-bottom: 3px;
+  }
+  .catch-input-horizontal-scroll input{
+    border-radius: 5px;
   }
 
   .catch-input-horizontal-scroll p{
@@ -270,17 +275,27 @@ hr.solid {
 .next-button{
   float: right;
   margin-right: 33px;
-  width: 45px;
-  height: 33px;
-  border: solid black 1px;
+  width: 54px;
+  height: 27px;
+  border: solid black 3px;
+  border-radius: 5px;
+  text-align: center;
+  background-color: white;
+  font-weight: bold;
+  color: black;
 }
 
 .back-button{
   float: left;
   margin-right: 33px;
-  width: 45px;
-  height: 33px;
-  border: solid black 1px;
+  width: 54px;
+  height: 27px;
+  border: solid black 3px;
+  border-radius: 5px;
+  text-align: center;
+  background-color: white;
+  font-weight: bold;
+  color: black;
 }
 
 #file-input{
@@ -339,14 +354,20 @@ hr.solid {
   }
 
   .image-preview-div{
+
     position: relative;
-    margin: auto;
+    left: 50%;
     border: solid black 1px;
     max-width:340px;
     max-height: 340px;
+    background-color:  rgba(253, 252, 252);
+    display: table-cell;
+    vertical-align: middle;
+    border-radius: 5px;
   }
   .image-preview-delete-button{
     display: none;
+    
     position: absolute;
     top: 0px;
     right: 0px;
@@ -358,11 +379,13 @@ hr.solid {
   
   .catch-img-preview{
     
-    display: block;
+
     max-width:100%;
     max-height: 100%;
     margin-right: auto;
     margin-left: auto;
+    margin-top: auto;
+    margin-bottom: auto;
   }
   
   .catch-img-preview:hover{
@@ -453,6 +476,10 @@ hr.solid {
 
   .info-box{
    border: solid orange 1px;
+  
+  }
+  .info-box a{
+    color: papayawhip;
   }
 
        
@@ -495,20 +522,25 @@ hr.solid {
 
   .map-box{
     
+      width: 600px;
+      height: 600px;
       margin: auto;
      
 
   }
 
   .map-container{
-      /*
-    width: 250px;
-    height: 300px;
-    */
+      
+  
+    
 
     display: inline-block;
-    height: 522px;
-    margin: auto;
+    height: 440px;
+    width: 700px;
+    min-width: 500px;
+    min-height: 322px;
+    margin-left: calc(50% - 350px );
+   
     border: solid orange 1px;
   /*
     background-image: url('/home/austin/projects/fish-in-sight/fish-in-sight-frontend/src/boatandseagulls.jpg');
@@ -520,14 +552,15 @@ hr.solid {
   }
 
   .map div{
-      width: 500px;
-      height: 500px;
+      width: 600px;
+      height: 600px;
       margin: auto;
   }
 
   .react-map{
       position: absolute;
       margin-top: -200px;
+      width: 600px;
   }
 
   .autocomplete-dropdown-container{   
@@ -582,4 +615,16 @@ hr.solid {
     .hidden{
       display: none;
     }
+
+
+    .new-spot-div .input-box{
+      width: 300px;
+      margin-left: calc(50% - 100px);
+    }
+
+    .new-spot-div h2{
+      text-align: center;
+    }
+
+
  

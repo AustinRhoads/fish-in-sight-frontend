@@ -67,7 +67,7 @@ class SpotInput extends Component{
             lat: 0,
             lng: 0,
         })
-
+            this.props.history.push('/spots')
     }
 
 
@@ -91,13 +91,18 @@ class SpotInput extends Component{
         return(
             <div className="new-spot-div">
                 <h2>New Spot</h2>
+                
                 <form className="new-spot-form" onSubmit={e => this.handleOnSubmit(e)}>
-                    <input type="text" name="name" onChange={this.handleOnChange} placeholder="what's this place called?" value={this.state.name} />
+                    <div className="input-box">
+                        <input required type="text" name="name" onChange={this.handleOnChange} placeholder="what's this place called?" value={this.state.name} />
+                        <input type="submit" value="Save" />
+                    </div>
                     <br />
 
                     <SpotsMapContainer uid = {this.props.uid} catches={this.props.allCatches}  spots={this.props.spots} updateLatLngAddress={this.updateLatLngAddress} />
-                    <input type="submit" value="New Spot" />
+                    
                 </form>
+                <footer style={{height: 180}}></footer>
 
             </div>
         )

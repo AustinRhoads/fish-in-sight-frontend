@@ -26,7 +26,7 @@ class SpotMarker extends Component{
   render(){
 
     return(
-        <div className="spot-marker"  onMouseEnter={this.toggleHover} onMouseLeave={this.toggleHover}  style={{ backgroundColor: this.props.color, cursor: 'pointer'}}>
+        <div className="spot-marker"  onMouseEnter={this.toggleHover} onMouseLeave={this.toggleHover} /* style={{ backgroundColor: this.props.color, cursor: 'pointer'}}*/>
           {this.renderName()}
         </div>
     )

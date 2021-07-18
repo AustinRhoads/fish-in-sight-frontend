@@ -25,11 +25,14 @@ class User extends Component{
         if(this.state.is_fetched){
             return (
                 <div>
-                    <div>
+                    <div style={{textAlign: "center"}}>
                         <h1>{this.state.user.username}</h1>
+                        <hr className="solid" style={{margin: "auto"}}></hr>
                         <h3>Email: {this.state.user.email}</h3>
+                        <hr className="solid" style={{margin: "auto"}}></hr>
                     </div>
-                <UserCatches redirect={this.props.redirect}  user={this.state.user} uid = {this.state.user.id} species={this.state.user.species} catches={this.state.user.catches}  />
+                    <br />
+                <UserCatches redirect={this.props.redirect}  user={this.state.user} uid = {this.state.user.id} species={this.state.user.species} catches={this.state.user.catches} style={{margin: "auto"}}  />
                 </div>
 
     

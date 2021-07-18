@@ -2,16 +2,50 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 18px;
-    height: 18px;
-    background-color: #000;
-    border: 2px solid #fff;
+    width: 50px;
+    height: 50px;
+   /* background-color: #000;*/
+   /* border: 2px solid #fff;*/
+   /* border-radius: 100%;*/
+    user-select: none;
+    transform: translate(-50%, -50%);
+    background-image: url('/home/austin/projects/fish-in-sight/fish-in-sight-frontend/src/spotMarkerDarkBlue.png');
+    background-repeat: no-repeat;
+    background-size: 50px 50px;
+  }
+
+  .Catch-marker{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 50px;
+    height: 50px;
+    /*background-color: #0000;*/
+   /* border: 2px solid #fff;*/
     border-radius: 100%;
     user-select: none;
     transform: translate(-50%, -50%);
-
+    background-image: url('/home/austin/projects/fish-in-sight/fish-in-sight-frontend/src/catchMarkerGreen.png');
+    background-repeat: no-repeat;
+    background-size: 50px 50px;
   }
+
+  .marker-catch-div{
+    text-align: center;
+    border:solid springgreen 2px;
+    border-radius: 5px;
+    width:120px;
+    height: 120px;
+    background-color: white;
+  }
+  .marker-catch-div img{
+    max-width: 120px;
+    max-height: 120px;
+    background-color: white;
+  }
+
   :hover {
+
     z-index: 1;
   }
 
@@ -20,11 +54,11 @@
     color: greenyellow;
     top: 50%;
     left: 50%;
-    width: 33px;
+    width: 73px;
     height: 33px;
-    background-color: rgb(0,0,0,0.4);
+    background-color: rgba(24, 11, 145, 0.4);
     border: 2px solid #fff;
-    border-radius: 50%;
+    border-radius: 5px;
     user-select: none;
     transform: translate(-50%, -50%);
   }
