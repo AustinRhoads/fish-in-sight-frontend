@@ -65,7 +65,7 @@ class Login extends Component {
         return(
             <div>
                
-       <hr className="solid"></hr>
+       
                 <form onSubmit={e => this.handelOnSubmit(e)}>
 
                     <input type="text" name="email" value={this.state.email} placeholder="email" onChange={e => this.handelOnChange(e)} required />

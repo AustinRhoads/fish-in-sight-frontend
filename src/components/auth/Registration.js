@@ -47,12 +47,13 @@ class Registration extends Component {
                 console.log(resp)
                 this.props.handelSuccessfulAuth(resp.user)
               //  this.props.userLogin(resp.user)
-            } else {
-                this.setErrors(resp.error)
+            } else if(resp.status === 500) {
+                this.props.setError(resp.error)
             }
             console.log("registration res", resp);
         }).catch(error =>{
-            console.log("registration error", error)
+            console.log("registration error", error);
+            this.props.setError(error);
         });
 
 
@@ -79,6 +80,17 @@ class Registration extends Component {
         
     }
 
+    passwordConfirmMatch = () => {
+        if(this.state.password !== this.state.password_confirmation){
+            document.getElementById("pw_confirm").style.border = "solid red 1px";
+            return(
+                <p style={{color: "red", fontSize: "10px"}}>passwords do not match.</p>
+            )
+        } else {
+            document.getElementById("pw_confirm").style.border = "solid lightgreen 3px";
+        }
+
+    }
 
     render(){
         return(
@@ -90,7 +102,8 @@ class Registration extends Component {
                     <br />
                     <input type="password" name="password" placeholder="password" value = {this.state.password} onChange={e => this.handelOnChange(e)} required/>
                     <br />
-                    <input type="password" name="password_confirmation" placeholder="confirm password" value = {this.state.password_confirmation} onChange={e => this.handelOnChange(e)} required/>
+                    <input type="password" id="pw_confirm" name="password_confirmation" placeholder="confirm password" value = {this.state.password_confirmation} onChange={e => this.handelOnChange(e)} required/>
+                    {this.passwordConfirmMatch()}
                     <br/>
                     <input type="submit" />
                 </form>

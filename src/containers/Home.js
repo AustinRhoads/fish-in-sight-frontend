@@ -1,47 +1,41 @@
 import React, { Component } from 'react'
-import Registration from '../components/auth/Registration'
-import Login from '../components/auth/Login'
-import { withRouter } from 'react-router-dom';
-import { connect } from 'react-redux'
+
 
 
 
 class Home extends Component {
 
 
-    getCSRFToken = () => {
-        return unescape(document.cookie.split('=')[1])
-      }
+
       componentDidMount(){
         let auxnav = document.body.querySelector('div.aux-nav')
         auxnav.style.display = "none";
+
       }
 
-    handelSuccessfulAuth = (data) => {  
-        this.props.handelLogin(data);
-        this.props.history.push('/dashboard')
-    }
 
-
-    renderAuth = () => {
-        return(
-            <div className="auth-div">
-                <p>LOGIN</p>
-                <Login userLogin={this.props.userLogin}  getCSRFToken={this.props.getCSRFToken} handelSuccessfulAuth={this.handelSuccessfulAuth} />
-                <hr className="solid"></hr>
-                <p>Not a member? Sign up.</p>
-                <Registration userLogin={this.props.userLogin}  getCSRFToken={this.props.getCSRFToken} handelSuccessfulAuth={this.handelSuccessfulAuth} />
-            </div>
-        )
-    }
 
     renderAppropriatePage = () => {
-        console.log(this.props)
+      
         if(this.props.loggedInStatus === "NOT_LOGGED_IN"){
-           // return <AuthContainer handelSuccessfulAuth={this.handelSuccessfulAuth} getCSRFToken={this.getCSRFToken} userLogin={this.props.userLogin}/>
-            return this.renderAuth()
-        } else {
-            return <h2>Hows it hanging?</h2>
+         
+           return(
+            <div className="Welcome Page">
+                <h2>CATCH FISH.</h2>
+                <h2>EXPLORE NEW WATERS.</h2>
+                <h2>CONNECT WITH OTHERS.</h2>
+            </div>
+           )
+           }
+    }
+
+    renderApropriate = () => {
+        if(this.props.loggedInStatus === "NOT_LOGGED_IN"){
+        
+            return(
+                <h3><a href="/login">Login</a>/<a href="/register">Signup</a></h3>
+            )
+        
         }
     }
 
@@ -51,7 +45,14 @@ class Home extends Component {
         return(
             <div id="home-page">
 
-           {/*this.renderAppropriatePage()*/}
+            {/*this.renderAppropriatePage()*/}
+            <div className="Welcome Page">
+                <h2>CATCH FISH.</h2>
+                <h2>EXPLORE NEW WATERS.</h2>
+                <h2>CONNECT WITH OTHERS.</h2>
+            </div>
+
+            {this.renderApropriate()}
            
             </div>
         )
@@ -59,13 +60,6 @@ class Home extends Component {
 
 }
 
-const mapStateToProps = state => {
-   
-    return{
-     // loggedInStatus: state.userStatus.loggedInStatus,
-     // user: state.userStatus.user,
-    }
-    
-  }
+
   
-export default connect(mapStateToProps) (withRouter(Home));
+export default Home;

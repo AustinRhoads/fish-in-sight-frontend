@@ -30,6 +30,7 @@ class SpotsMapContainer extends Component {
 
     componentDidMount(){
         this.setMyLocation()
+        console.log(this.props)
        
       }
 

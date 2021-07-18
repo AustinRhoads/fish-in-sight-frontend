@@ -74,6 +74,7 @@ handleOnSubmit = (e) => {
    .then(resp => resp.json())
    .then(resp => {
        console.log("catches res", resp);
+       this.props.history.push(`/catches/${resp.id}`)
    }).catch(error =>{
        console.log("catches error", error)
    });

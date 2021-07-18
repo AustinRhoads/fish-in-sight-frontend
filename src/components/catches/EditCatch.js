@@ -104,11 +104,12 @@ handleOnSubmit = (e) => {
     key: "",
    })
 
+   this.props.history.push(`/catches/${this.props.match.params.id}`)
 
 }
 
 async componentDidMount(){
-
+    console.log(this.props)
     this.setState({
         user_id: this.props.uid,
     })

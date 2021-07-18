@@ -154,7 +154,7 @@ class App extends Component{
             <Route exact path="/login" render={props => <LoginContainer {...props} redirect={this.state.redirect} getCSRFToken={this.getCSRFToken} handelLogin={this.handelLogin} userLogin={this.props.userLogin} />}/>
             <Route exact path="/register" render={props => <RegistrationContainer {...props} redirect={this.state.redirect} getCSRFToken={this.getCSRFToken} userLogin={this.props.userLogin} handelLogin={this.handelLogin} />}/>
             
-            <Route exact path="/maps" render={props => <SpotInput {...props} uid = {this.state.user.id} spots={this.props.spots}/>} />
+            <Route exact path="/maps" render={props => <SpotInput {...props} uid = {this.state.user.id} spots={this.props.spots} allCatches={this.props.allCatches} /> } />
             
             <Route exact path={"/dashboard"} render={props => <DashboardContainer {...props} redirect={this.state.redirect} spots={this.props.spots} baits={this.props.baits} species={this.props.species}  user={this.state.user} loggedInStatus={this.state.loggedInStatus} userCatches={this.state.userCatches}  updateCatches={this.updateCatches} /*catches={this.props.user.catches}*/ /> } />
             <Route exact path={"/catches/:id/edit"} render={props => <EditCatch {...props}   redirect={this.state.redirect} uid={this.state.user.id} species={this.props.species} baits={this.props.baits} spots={this.props.spots} />} />
