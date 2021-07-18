@@ -5,7 +5,7 @@ import EXIF from 'exif-js';
 import GoogleMapReact from 'google-map-react';
 
 
-class CatchInput extends Component {
+class EditCatch extends Component {
 
     state = {
         user_id: "",
@@ -15,6 +15,7 @@ class CatchInput extends Component {
         spot_id: "",
         image: null,
         image_preview: null,
+        image_updated: false,
         date: "",
         time: "",
         lbs: "",
@@ -43,17 +44,21 @@ getCSRFToken = () => {
 }
 
 handleOnSubmit = (e) => {
-    console.log(this.state)
+    console.log("Finale",this.state.image)
 
     e.preventDefault();
    const formData = new FormData();
  
-   formData.append('user_id', this.props.uid)
+   formData.append('id', this.state.id)
+   formData.append('user_id', this.state.user_id)
    formData.append('species_id', this.state.species_id)
    formData.append('bait_id', this.state.bait_id)
    formData.append('spot_id', this.state.spot_id)
    formData.append('notes', this.state.notes)
-   formData.append('image', this.state.image)
+   if(this.state.image_uploaded){
+    formData.append('image', this.state.image)
+   }
+   
    formData.append('date', [this.state.date, this.state.time].join(" "))
    formData.append('size', this.state.inches)
    formData.append('lat', this.state.center.lat)
@@ -61,7 +66,7 @@ handleOnSubmit = (e) => {
     
 
    const configObject = {
-    method: "POST",
+    method: "PUT",
     credentials: 'include',
     headers: {
         'X-CSRF-Token': this.getCSRFToken(),
@@ -71,7 +76,7 @@ handleOnSubmit = (e) => {
 }
 
 
-   fetch("http://localhost:3000/api/v1/catches", configObject)
+   fetch(`http://localhost:3000/api/v1/catches/${this.state.id}`, configObject)
    .then(resp => resp.json())
    .then(resp => {
        console.log("catches res", resp);
@@ -103,11 +108,39 @@ handleOnSubmit = (e) => {
 
 }
 
-componentDidMount(){
+async componentDidMount(){
 
     this.setState({
         user_id: this.props.uid,
     })
+    
+    const caught = await fetch(`http://localhost:3000/api/v1/catches/${this.props.match.params.id}`).then(resp => resp.json())
+    
+    const date = caught.date.split("").splice(0, 10).join("")
+    const time = caught.date.split("").slice(11, 16).join("")
+    
+    this.setState({
+    id: caught.id,        
+    user_id: caught.user_id,
+    notes: caught.notes,
+    species_id: caught.species_id ,
+    bait_id: caught.bait_id,
+    spot_id: caught.spot_id,
+    image: caught.image,
+    image_preview: caught.image.url,
+    date: date,
+    time: time,
+   
+    inches: caught.size,
+
+    center: {
+        lat: parseFloat(caught.lat), 
+        lng: parseFloat(caught.lng),
+    },
+    zoom: 11,
+    
+})
+
 
     this.setMyLocation();
     
@@ -158,7 +191,7 @@ renderSpotsOptions = () => {
 
 fileSelectHandler = (e) => {
     
-      
+      this.setState({image_updated: true})
  
         if(e.target.files[0]){
          this.exifExtractor(e.target.files[0]);
@@ -224,7 +257,8 @@ renderImagePreview = () => {
 
 selectedSpeciesName = () => {
 
-    if(this.state.species_id){
+    if(this.state.species_id && this.props.species.length > 0){
+        
         let spec = this.props.species.find(spec => spec.id === parseInt(this.state.species_id))
        return spec.name
     }
@@ -233,7 +267,7 @@ selectedSpeciesName = () => {
 
 
 selectedBaitName = () => {
-    if(this.state.bait_id){
+    if(this.state.bait_id && this.props.baits.length > 0){
         let bait = this.props.baits.find(bait => bait.id === parseInt(this.state.bait_id))
       
        return bait.name
@@ -241,24 +275,8 @@ selectedBaitName = () => {
 
 }
 
-renderDateGuess = () => {
-    if(this.state.guessed_date){
-        console.log(this.state.guessed_date)
-        return(
-            <>
-            <p>{String(this.state.guessed_date)}</p>
-            <p>Is this when you caught it?</p>
-            <button onClick={e => this.correctGuess(e)}>Yes</button><button>No</button>
-            <br />
-            </>
-        )
-    }
-}
 
-correctGuess = (e) => {
-    e.preventDefault();
-     this.setState({date: this.state.guessed_date})
-}
+
 
 selectActiveA = () => {
     const sections = document.getElementsByClassName("input-box-horizontal-scroll")
@@ -304,6 +322,7 @@ handleMapChange = (center, zoom, bounds, marginBounds) => {
         this.selectActiveA()
         return(
         <div>
+           
             <form className="scrollable-catch-input" onSubmit={ e => this.handleOnSubmit(e)}>
             <div className= "outer-box">   
                 <div id="hsdci" className="catch-input-horizontal-scroll">
@@ -455,7 +474,7 @@ handleMapChange = (center, zoom, bounds, marginBounds) => {
 
 
 const mapStateToProps = state => {
-    
+   
     return {
         species: state.species.all_species,
         baits: state.baits.all_baits,
@@ -464,4 +483,4 @@ const mapStateToProps = state => {
 }
 
 
-export default connect(mapStateToProps) (CatchInput);
+export default connect(mapStateToProps) (EditCatch);

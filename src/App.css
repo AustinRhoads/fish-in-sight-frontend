@@ -184,6 +184,15 @@ hr.solid {
     scroll-behavior: smooth;
     border-radius: 20px;
   }
+  .catch-input-horizontal-scroll  h4, h3{
+    margin-top: 3px;
+    margin-bottom: 3px;
+  }
+
+  .catch-input-horizontal-scroll p{
+    margin-top: 3px;
+    margin-bottom: 3px;
+  }
 
   .input-box-horizontal-scroll{
     /*position: absolute;*/
@@ -540,14 +549,21 @@ hr.solid {
   }
 
   .catch-page{
-
+    width: 600px;
+    margin: auto;
+    text-align: center;
   }
 
   .catch-page > img{
-    max-height: 300px;
-    max-width: 300px;
+    max-height: 400px;
+    max-width: 400px;
+    margin-left: calc(50% - 250px);
   }
 
+  .display-banner{
+    width: 100%;
+    background-color: slategray;
+  }
   .global-feed-catches{
   background-color: rgba(0,0,0,0.9);
   color: papayawhip;
