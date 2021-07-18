@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import Registration from '../components/auth/Registration'
 import Login from '../components/auth/Login'
-//import AuthContainer from './AuthContainer'
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux'
 
@@ -61,7 +60,7 @@ class Home extends Component {
 }
 
 const mapStateToProps = state => {
-    console.log(state)
+   
     return{
      // loggedInStatus: state.userStatus.loggedInStatus,
      // user: state.userStatus.user,

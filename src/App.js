@@ -43,44 +43,37 @@ class App extends Component{
 
 
 
-checkLoginStatus = () =>{
-  axios.get('http://localhost:3000/logged_in', {withCredentials: true})
-  .then(resp => {
-   
-      if(resp.data.logged_in === true && this.state.loggedInStatus === "NOT_LOGGED_IN"){
+  checkLoginStatus = () =>{
+    axios.get('http://localhost:3000/logged_in', {withCredentials: true})
+    .then(resp => {
+    
+        if(resp.data.logged_in === true && this.state.loggedInStatus === "NOT_LOGGED_IN"){
+
+          this.setState({
+            loggedInStatus: "LOGGED_IN",
+            user: resp.data.user,
+            redirect: false,
           
-        this.setState({
-          loggedInStatus: "LOGGED_IN",
-          user: resp.data.user,
-          redirect: false,
-         //userCatches: resp.data.catches,
-        })
+          })
 
-        //////////testing
-
-     
-
-        this.getUserAndUserCatches(resp.data.user.id)
-
-      
-         
-         
-      } else if (!resp.data.logged_in && this.state.loggedInStatus === "LOGGED_IN") {
-        this.setState({
-          loggedInStatus: "NOT_LOGGED_IN",
-          user: {},
-          redirect: true,
-          userCatches: [],
-        });
+          this.getUserAndUserCatches(resp.data.user.id)
         
-        
-      } else {
-        this.setState({redirect: true})
-      }
-  }).catch(error => {
-    console.log("check logged in error: ", error)
-  })
-}
+        } else if (!resp.data.logged_in && this.state.loggedInStatus === "LOGGED_IN") {
+          this.setState({
+            loggedInStatus: "NOT_LOGGED_IN",
+            user: {},
+            redirect: true,
+            userCatches: [],
+          });
+
+
+        } else {
+          this.setState({redirect: true})
+        }
+    }).catch(error => {
+      console.log("check logged in error: ", error)
+    })
+  }
 
 
 
@@ -120,41 +113,24 @@ checkLoginStatus = () =>{
   }
 
 
+  async componentDidMount(){
+    await this.checkLoginStatus()
+    await this.props.getSpecies();
+    await this.props.getSpots();
+    await this.props.getBaits();
+    await this.props.getAllUsers();
+    await this.props.getAllCatches();
+  
+   }
 
 
-  updateCatches = (newCatch) => {
-    this.setState({
-      userCatches: [...this.state.userCatches, newCatch]
-    })
-  }
- 
 
-  componentDidMount(){
-    this.checkLoginStatus()
-   this.props.getSpecies();
-   this.props.getSpots();
-   this.props.getBaits();
-   this.props.getAllUsers();
-   this.props.getAllCatches();
-
-   //this.props.getUserCatches(this.props.user.id);
- 
-
-  }
 
   renderAuxNav = () => {
     if(this.state.loggedInStatus === "LOGGED_IN"){
       return <AuxNavBar currentUser={this.state.user} />
-
-
-
-    }
-    
+    }  
   }
-
-
-
-
 
 
 
@@ -177,19 +153,20 @@ checkLoginStatus = () =>{
 
             <Route exact path="/login" render={props => <LoginContainer {...props} redirect={this.state.redirect} getCSRFToken={this.getCSRFToken} handelLogin={this.handelLogin} userLogin={this.props.userLogin} />}/>
             <Route exact path="/register" render={props => <RegistrationContainer {...props} redirect={this.state.redirect} getCSRFToken={this.getCSRFToken} userLogin={this.props.userLogin} handelLogin={this.handelLogin} />}/>
-            <Route exact path="/maps" render={props => <SpotInput uid = {this.state.user.id} /* updateSpots={(spot) => this.updateData("spots", spot)} */ spots={this.props.spots}/>} />
+            
+            <Route exact path="/maps" render={props => <SpotInput {...props} uid = {this.state.user.id} spots={this.props.spots}/>} />
             
             <Route exact path={"/dashboard"} render={props => <DashboardContainer {...props} redirect={this.state.redirect} spots={this.props.spots} baits={this.props.baits} species={this.props.species}  user={this.state.user} loggedInStatus={this.state.loggedInStatus} userCatches={this.state.userCatches}  updateCatches={this.updateCatches} /*catches={this.props.user.catches}*/ /> } />
-            <Route exact path={"/catches/:id/edit"} render={props => <EditCatch {...props}   redirect={this.state.redirect} uid={this.state.user.id} species={this.props.species} />} />
-            <Route exact path={"/catches/new"} render={props => <CatchInput {...props} redirect={this.state.redirect} uid={this.state.user.id} />} />
+            <Route exact path={"/catches/:id/edit"} render={props => <EditCatch {...props}   redirect={this.state.redirect} uid={this.state.user.id} species={this.props.species} baits={this.props.baits} spots={this.props.spots} />} />
+            <Route exact path={"/catches/new"} render={props => <CatchInput {...props} redirect={this.state.redirect} uid={this.state.user.id} species={this.props.species}  baits={this.props.baits} spots={this.props.spots}  />}/>
             <Route export path={"/catches/:id"} render={props => <Catch {...props} redirect={this.state.redirect} uid={this.state.user.id} />} />
-            <Route path={"/catches"} render={props => <AllCatches {...props} redirect={this.state.redirect} uid={this.state.user.id} />} />
+            <Route path={"/catches"} render={props => <AllCatches {...props} redirect={this.state.redirect} uid={this.state.user.id} catches={this.props.allCatches} />} />
 
 
             <Route exact path={"/mycatches"} render={props => <UserCatches {...props}  redirect={this.state.redirect}  user={this.state.user} uid = {this.state.user.id} catches={this.state.userCatches}    /> } />
            
             
-           
+            <Route path={"/users/:id/edit"} uid={this.state.user.id} />
             <Route path={`/users/:id`} render={props => <User {...props} redirect={this.state.redirect} />} />
             
           </Switch>

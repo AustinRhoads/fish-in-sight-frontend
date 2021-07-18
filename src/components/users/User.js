@@ -2,9 +2,7 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
 import UserCatches from '../catches/UserCatches';
-//import StatsBox from './StatsBox';
-//import CatchBox from '../catches/CatchBox';
-//import cuid from 'cuid'
+
 
 class User extends Component{
     state = {
@@ -18,20 +16,19 @@ class User extends Component{
      
        const user = await fetch(`http://localhost:3000/api/v1/users/${this.state.user_id}`).then(resp => resp.json())
        this.setState({user: user, is_fetched: true})
-
-       let auxnav = document.body.querySelector('div.aux-nav')
-       
+       let auxnav = document.body.querySelector('div.aux-nav')   
        auxnav.style.display = "block";
    }
 
 
     renderUserInfo = () => {
-     //  const user = this.find_user()
         if(this.state.is_fetched){
             return (
                 <div>
-                <h1>{this.state.user.username}</h1>
-               
+                    <div>
+                        <h1>{this.state.user.username}</h1>
+                        <h3>Email: {this.state.user.email}</h3>
+                    </div>
                 <UserCatches redirect={this.props.redirect}  user={this.state.user} uid = {this.state.user.id} species={this.state.user.species} catches={this.state.user.catches}  />
                 </div>
 

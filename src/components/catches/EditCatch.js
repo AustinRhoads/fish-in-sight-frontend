@@ -1,6 +1,5 @@
 import cuid from 'cuid';
 import React, { Component } from 'react';
-import { connect } from 'react-redux'
 import EXIF from 'exif-js';
 import GoogleMapReact from 'google-map-react';
 
@@ -473,14 +472,7 @@ handleMapChange = (center, zoom, bounds, marginBounds) => {
 
 
 
-const mapStateToProps = state => {
-   
-    return {
-        species: state.species.all_species,
-        baits: state.baits.all_baits,
-        spots: state.spots.all_spots,
-    }
-}
 
 
-export default connect(mapStateToProps) (EditCatch);
+
+export default  EditCatch;

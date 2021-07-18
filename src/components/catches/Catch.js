@@ -66,7 +66,7 @@ class Catch extends Component{
                    //this.handleMapChange(center, zoom, bounds, marginBounds);
                  
               }}
-                //key={this.state.key}
+                
                 >
                     
 
@@ -74,6 +74,8 @@ class Catch extends Component{
                 </GoogleMapReact>
                 </div>
             )
+        } else {
+            <h3>No Location Provided</h3>
         }
     }
 

@@ -341,7 +341,7 @@ hr.solid {
   .image-preview-div{
     position: relative;
     margin: auto;
-    border: solid orange 1px;
+    border: solid black 1px;
     max-width:340px;
     max-height: 340px;
   }

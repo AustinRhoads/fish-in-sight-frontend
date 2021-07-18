@@ -7,9 +7,9 @@ import { filterUserCatches } from "/home/austin/projects/fish-in-sight/fish-in-s
 class FilterCatches extends Component{
 
     state = {
-        selectedSpecies:  null,
-        selectedBait: null,
-        selectedSpot: null,
+        selectedSpecies: "",
+        selectedBait: "",
+        selectedSpot: "",
     }
 
 
@@ -61,17 +61,17 @@ class FilterCatches extends Component{
         )
         
     })
-    console.log("FILTERED: ",filtered)
+   
     this.props.filterize(filtered)
 
-        if(selectedSpecies == null && selectedBait == null && selectedSpot == null){
+        if(selectedSpecies === "" && selectedBait === "" && selectedSpot === ""){
             this.props.unfilterize()
         }
     
     }
 
     resetOne = (e) => {
-        this.setState({[e.target.nextSibling.name]: null}, () => this.runFilterize(this.props.catches))
+        this.setState({[e.target.nextSibling.name]: ""}, () => this.runFilterize(this.props.catches))
         e.target.nextSibling.value = ""
        
 
@@ -79,11 +79,13 @@ class FilterCatches extends Component{
 
     resetAll = () => {
         this.setState({
-            selectedSpecies:  null,
-            selectedBait: null,
-            selectedSpot: null,
+            selectedSpecies:  "",
+            selectedBait: "",
+            selectedSpot: "",
         })
         this.props.unfilterize()
+        document.getElementById('sel_b').value = "";
+        document.getElementById('sel_s').value = "";
     }
 
     render(){
@@ -92,23 +94,16 @@ class FilterCatches extends Component{
 
             <h3>Filter By: </h3>
             
-            <button onClick={(e) => this.resetOne(e)}>CLEAR</button><input name="selectedSpecies" list="specs" placeholder="--search species--" onChange={(e) => this.handleOnChange(e)}/>
+            <button onClick={(e) => this.resetOne(e)}>CLEAR</button><input id="sel_s" name="selectedSpecies" list="specs" placeholder="--search species--" onChange={(e) => this.handleOnChange(e)} value={this.state.selectedSpecies} />
             <datalist id ="specs">
             {this.renderSpeciesOptions()}
             </datalist>
             <br />
                 
-            <button onClick={(e) => this.resetOne(e) }>CLEAR</button><input name="selectedBait" list="baits" placeholder="--search baits--" onChange={(e) => this.handleOnChange(e)}/>
+            <button onClick={(e) => this.resetOne(e) }>CLEAR</button><input id="sel_b" name="selectedBait" list="baits" placeholder="--search baits--" onChange={(e) => this.handleOnChange(e)} value={this.state.selectedBait}/>
             <datalist id="baits" >
                 {this.renderBaitsOptions()}
             </datalist> 
-            {/* 
-            <br />
-            <button onClick={() => this.props.unfilterize()}>CLEAR</button><input name="selectedSpot" list="spots"  placeholder="--search spots--" onChange={(e) => this.handleOnChange(e)} />
-            <datalist id="spots" >
-                {this.renderSpotsOptions()}
-            </datalist>
-                */}
                 <br />
 
                 <button onClick={this.resetAll}>Reset All</button>

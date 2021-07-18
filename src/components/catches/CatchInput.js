@@ -43,7 +43,6 @@ getCSRFToken = () => {
 }
 
 handleOnSubmit = (e) => {
-    console.log(this.state)
 
     e.preventDefault();
    const formData = new FormData();
@@ -457,8 +456,8 @@ handleMapChange = (center, zoom, bounds, marginBounds) => {
 const mapStateToProps = state => {
     
     return {
-        species: state.species.all_species,
-        baits: state.baits.all_baits,
+        //species: state.species.all_species,
+       // baits: state.baits.all_baits,
         spots: state.spots.all_spots,
     }
 }
