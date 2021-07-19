@@ -43,7 +43,7 @@ getCSRFToken = () => {
 }
 
 handleOnSubmit = (e) => {
-    console.log("Finale",this.state.image)
+    
 
     e.preventDefault();
    const formData = new FormData();

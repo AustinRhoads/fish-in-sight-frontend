@@ -16,11 +16,12 @@ import RegistrationContainer from './containers/RegistrationContainer.js'
 import UserCatches from './components/catches/UserCatches.js'
 import CatchInput from './components/catches/CatchInput.js'
 import Catch from './components/catches/Catch.js'
-import AllCatches from './components/catches/AllCatches.js'
+import Catches from './components/catches/Catches.js'
 import EditCatch from './components/catches/EditCatch.js'
 
 import AuxNavBar from './containers/AuxNavBar.js'
 import User from './components/users/User.js'
+import UserEdit from './components/users/UserEdit.js'
 import SpotInput from './components/spots/SpotInput.js'
 import SpotsMapContainer from './components/maps/SpotsMapContainer.js'
 
@@ -144,7 +145,7 @@ class App extends Component{
         
           <NavBarContainer user={this.state.user} loggedInStatus={this.state.loggedInStatus} userLogout={this.props.userLogout} />
          
-          <AuxNavBar id="aux_nav" currentUser={this.state.user} />
+          <AuxNavBar id="aux_nav" user={this.state.user} />
           <BrowserRouter>
 
           <Switch>
@@ -163,14 +164,14 @@ class App extends Component{
             <Route exact path={"/catches/:id/edit"} render={props => <EditCatch {...props}   redirect={this.state.redirect} uid={this.state.user.id} species={this.props.species} baits={this.props.baits} spots={this.props.spots} />} />
             <Route exact path={"/catches/new"} render={props => <CatchInput {...props} redirect={this.state.redirect} uid={this.state.user.id} species={this.props.species}  baits={this.props.baits} spots={this.props.spots}  />}/>
             <Route export path={"/catches/:id"} render={props => <Catch {...props} redirect={this.state.redirect} uid={this.state.user.id} />} />
-            <Route path={"/catches"} render={props => <AllCatches {...props} redirect={this.state.redirect} uid={this.state.user.id} catches={this.props.allCatches} />} />
+            <Route path={"/catches"} render={props => <Catches {...props} redirect={this.state.redirect} uid={this.state.user.id} catches={this.props.allCatches} />} />
 
 
             <Route exact path={"/mycatches"} render={props => <UserCatches {...props}  redirect={this.state.redirect}  user={this.state.user} uid = {this.state.user.id} catches={this.state.userCatches}    /> } />
            
             
-            <Route path={"/users/:id/edit"} uid={this.state.user.id} />
-            <Route path={`/users/:id`} render={props => <User {...props} redirect={this.state.redirect} />} />
+            <Route path={"/users/:id/edit"} uid={this.state.user.id} render={props=> <UserEdit {...props} uid={this.state.uid} user={this.state.user} />} />
+            <Route path={`/users/:id`} render={props => <User {...props} redirect={this.state.redirect} uid={this.state.user.id} />} />
             
           </Switch>
           </BrowserRouter>

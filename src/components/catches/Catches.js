@@ -4,7 +4,7 @@ import cuid from 'cuid'
 
 
 
-export function AllCatches (props){
+export function Catches (props){
 
 
 
@@ -30,4 +30,4 @@ const renderCatches = () => {
 
 }
 
-export default AllCatches;
+export default Catches;
