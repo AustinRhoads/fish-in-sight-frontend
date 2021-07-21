@@ -319,6 +319,7 @@ handleMapChange = (center, zoom, bounds, marginBounds) => {
  
 
     render(){
+       
         this.selectActiveA()
         return(
         <div>

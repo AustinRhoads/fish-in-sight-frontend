@@ -6,7 +6,7 @@ export default function userReducer (state= {user: {}, allUsers: [], loggedInSta
 
         case "USER_LOGIN":
             //fetch request maybe
-            console.log("USER_LOGIN",action)
+            
         return {...state, user: action.user, loggedInStatus: "LOGGED_IN", loading: true};
         case "USER_LOGGING_IN":
 

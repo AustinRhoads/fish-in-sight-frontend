@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import Home from './containers/Home.js'
-import {BrowserRouter, Switch, Route,} from 'react-router-dom'
-import DashboardContainer from './containers/DashboardContainer.js'
+import {BrowserRouter, Switch, Route, Redirect} from 'react-router-dom'
+//import DashboardContainer from './containers/DashboardContainer.js'
 import './App.css'
 import axios from 'axios'
 import NavBarContainer from './containers/NavBarContainer'
@@ -16,14 +16,19 @@ import RegistrationContainer from './containers/RegistrationContainer.js'
 import UserCatches from './components/catches/UserCatches.js'
 import CatchInput from './components/catches/CatchInput.js'
 import Catch from './components/catches/Catch.js'
-import Catches from './components/catches/Catches.js'
+//import Catches from './components/catches/Catches.js'
 import EditCatch from './components/catches/EditCatch.js'
+
+import FollowingCatches from './components/catches/FollowingCatches.js'
 
 import AuxNavBar from './containers/AuxNavBar.js'
 import User from './components/users/User.js'
 import UserEdit from './components/users/UserEdit.js'
 import SpotInput from './components/spots/SpotInput.js'
 import SpotsMapContainer from './components/maps/SpotsMapContainer.js'
+
+import { ProtectedRoute } from './components/auth/ProtectedRoute.js'
+
 
 
 
@@ -33,11 +38,13 @@ import SpotsMapContainer from './components/maps/SpotsMapContainer.js'
 class App extends Component{
 
   state = {
-    loggedInStatus: "NOT_LOGGED_IN",
-    user: {},
+   loggedInStatus: localStorage.getItem('loggedInStatus') || "NOT_LOGGED_IN",
+   // loggedInStatus: "NOT_LOGGED_IN",
+    user: JSON.parse(localStorage.getItem('user')) || {},
     redirect: false,
     userCatches: [],
     allUser: [],
+    blah: "blah",
     
   }
 
@@ -46,6 +53,9 @@ class App extends Component{
 
 
   checkLoginStatus = () =>{
+    console.log(this.state.loggedInStatus)
+    
+   if(this.state.user !== {}){
     axios.get('http://localhost:3000/logged_in', {withCredentials: true})
     .then(resp => {
     
@@ -59,6 +69,7 @@ class App extends Component{
           })
 
           this.getUserAndUserCatches(resp.data.user.id)
+         
         
         } else if (!resp.data.logged_in && this.state.loggedInStatus === "LOGGED_IN") {
           this.setState({
@@ -70,11 +81,20 @@ class App extends Component{
 
 
         } else {
+          
           this.setState({redirect: true})
         }
     }).catch(error => {
       console.log("check logged in error: ", error)
     })
+  
+   } else {
+     this.setState({
+      loggedInStatus: "LOGGED_IN"
+     })
+   }
+    
+   
   }
 
 
@@ -86,13 +106,20 @@ class App extends Component{
   }
 
   
-  handelLogin = (data) => {
-    
+  handleLogin = (data) => {
+   // console.log("login user", data)
+    this.getUserAndUserCatches(data.id);
     this.setState({
       loggedInStatus: "LOGGED_IN",
       user: data,
       redirect: false,
     })
+  }
+
+  logout = () => {
+    localStorage.setItem('user', null)
+    localStorage.setItem('loggedInStatus', "NOT_LOGGED_IN")
+    this.props.userLogout()
   }
 
 
@@ -103,9 +130,12 @@ class App extends Component{
     .then(obj => {
       
         if(obj){
+          localStorage.setItem('user', JSON.stringify(obj))
+          localStorage.setItem('loggedInStatus', "LOGGED_IN")
            this.setState({
              user: obj,
              userCatches: obj.catches,
+             loggedInStatus: "LOGGED_IN",
             })
         }
         
@@ -115,14 +145,16 @@ class App extends Component{
   }
 
 
+
   async componentDidMount(){
-    await this.checkLoginStatus()
+    var userz = JSON.parse(localStorage.getItem('user'));
+    console.log(userz)
+    await this.checkLoginStatus();
     await this.props.getSpecies();
     await this.props.getSpots();
     await this.props.getBaits();
     await this.props.getAllUsers();
     await this.props.getAllCatches();
-  
    }
 
 
@@ -134,6 +166,16 @@ class App extends Component{
     }  
   }
 
+  redirectToHome = () => {
+    if(this.state.redirect){
+     
+    return(
+      <Redirect to="/" />
+    )
+    
+    }
+}
+
 
 
 
@@ -143,36 +185,38 @@ class App extends Component{
     return (
       <div className="App">
         
-          <NavBarContainer user={this.state.user} loggedInStatus={this.state.loggedInStatus} userLogout={this.props.userLogout} />
+          <NavBarContainer user={this.state.user} loggedInStatus={this.state.loggedInStatus} logout={this.logout} />
          
           <AuxNavBar id="aux_nav" user={this.state.user} />
           <BrowserRouter>
-
+      
           <Switch>
             <Route exact path={"/"}  render={props => (
                <Home {...props} handelLogin={this.handelLogin}  loggedInStatus={this.state.loggedInStatus} userLogin={this.props.userLogin}  getCSRFToken={this.getCSRFToken} />
             )}  />
 
-            <Route exact path="/login" render={props => <LoginContainer {...props} redirect={this.state.redirect} getCSRFToken={this.getCSRFToken} handelLogin={this.handelLogin} userLogin={this.props.userLogin} />}/>
+            <Route exact path="/login" render={props => <LoginContainer {...props} redirect={this.state.redirect} getCSRFToken={this.getCSRFToken} handleLogin={this.handleLogin} userLogin={this.props.userLogin} />}/>
             <Route exact path="/register" render={props => <RegistrationContainer {...props} redirect={this.state.redirect} getCSRFToken={this.getCSRFToken} userLogin={this.props.userLogin} handelLogin={this.handelLogin} />}/>
             
-            <Route exact path="/spots/new" render={props => <SpotInput {...props} uid = {this.state.user.id} spots={this.props.spots} allCatches={this.props.allCatches} /> } />
-            <Route exact path="/spots" render={props => <SpotsMapContainer uid = {this.props.uid} catches={this.props.allCatches}  spots={this.props.spots} /* updateLatLngAddress={this.updateLatLngAddress}*/ /> } />
+            <ProtectedRoute exact path="/spots/new" render={props => <SpotInput {...props} redirect={this.state.redirect} uid = {this.state.user.id} spots={this.props.spots} allCatches={this.props.allCatches} /> } />
+            <ProtectedRoute exact path="/spots" render={props => <SpotsMapContainer {...props} redirect={this.state.redirect} uid = {this.state.user.uid} catches={this.props.allCatches}  spots={this.props.spots} /* updateLatLngAddress={this.updateLatLngAddress}*/ /> } />
             
 
-            <Route exact path={"/dashboard"} render={props => <DashboardContainer {...props} redirect={this.state.redirect} spots={this.props.spots} baits={this.props.baits} species={this.props.species}  user={this.state.user} loggedInStatus={this.state.loggedInStatus} userCatches={this.state.userCatches}  updateCatches={this.updateCatches} /*catches={this.props.user.catches}*/ /> } />
-            <Route exact path={"/catches/:id/edit"} render={props => <EditCatch {...props}   redirect={this.state.redirect} uid={this.state.user.id} species={this.props.species} baits={this.props.baits} spots={this.props.spots} />} />
-            <Route exact path={"/catches/new"} render={props => <CatchInput {...props} redirect={this.state.redirect} uid={this.state.user.id} species={this.props.species}  baits={this.props.baits} spots={this.props.spots}  />}/>
-            <Route export path={"/catches/:id"} render={props => <Catch {...props} redirect={this.state.redirect} uid={this.state.user.id} />} />
-            <Route path={"/catches"} render={props => <Catches {...props} redirect={this.state.redirect} uid={this.state.user.id} catches={this.props.allCatches} />} />
+            
+            <ProtectedRoute  path={"/catches/:id/edit"} render={props => <EditCatch {...props} redirectToHome={this.redirectToHome}  redirect={this.state.redirect} uid={this.state.user.id} species={this.props.species} baits={this.props.baits} spots={this.props.spots} />}  />
+            <ProtectedRoute exact path={"/catches/new"} render={props => <CatchInput {...props} redirect={this.state.redirect} uid={this.state.user.id} species={this.props.species}  baits={this.props.baits} spots={this.props.spots}  />}/>
+            <ProtectedRoute export path={"/catches/:id"} render={props => <Catch {...props} redirect={this.state.redirect} uid={this.state.user.id} />} />
+        
+            <ProtectedRoute path={"/catches"} render={props => <FollowingCatches {...props}  redirect={this.state.redirect} uid={this.state.user.id} catches={this.props.allCatches}  />} />
 
+            <ProtectedRoute path={"/following/catches"} render={props => <FollowingCatches {...props}  redirect={this.state.redirect} uid={this.state.user.id} catches={this.props.allCatches}  />} />
 
-            <Route exact path={"/mycatches"} render={props => <UserCatches {...props}  redirect={this.state.redirect}  user={this.state.user} uid = {this.state.user.id} catches={this.state.userCatches}    /> } />
+            <ProtectedRoute exact path={"/mycatches"} render={props => <UserCatches {...props}  redirect={this.state.redirect}  user={this.state.user} uid = {this.state.user.id} catches={this.state.userCatches}    /> } />
            
             
-            <Route path={"/users/:id/edit"} uid={this.state.user.id} render={props=> <UserEdit {...props} uid={this.state.uid} user={this.state.user} />} />
-            <Route path={`/users/:id`} render={props => <User {...props} redirect={this.state.redirect} uid={this.state.user.id} />} />
-            
+            <ProtectedRoute path={"/users/:id/edit"} uid={this.state.user.id} render={props=> <UserEdit {...props}   updateUser={this.updateUser} uid={this.state.uid} user={this.state.user} checkLoginStatus={this.checkLoginStatus} />} />
+            <ProtectedRoute path={`/users/:id`} render={props => <User {...props} redirect={this.state.redirect} currentUser={this.state.user} uid={this.state.user.id} />} />
+            <Route path="*" render={() => "404 page not found"} />
           </Switch>
           </BrowserRouter>
           
@@ -191,7 +235,7 @@ const mapStateToProps = state => {
  
   return{
    // loggedInStatus: state.userStatus.loggedInStatus,
-  //  user: state.userStatus.user,
+    user: state.userStatus.user,
     species: state.species.all_species,
     spots: state.spots.all_spots,
     baits: state.baits.all_baits,

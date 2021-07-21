@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import auth from './auth.js'
 
 
 class Login extends Component {
@@ -7,6 +8,10 @@ class Login extends Component {
         password: "",
         email: "",
         loginErrors: "",
+    }
+
+    componentDidMount(){
+        console.log(this.props)
     }
  
 
@@ -25,6 +30,8 @@ class Login extends Component {
                 password: password,
             }
         }
+
+        
   
        const configObject = {
         method: "POST",
@@ -35,7 +42,16 @@ class Login extends Component {
         },
         body: JSON.stringify(userLoggingIn)
     }
+
+    const functionsObject = {
+        redirectPath: (id) =>  { if(auth.isAuthenticated){this.props.history.push(`/users/${id}`)}},
+        login: (resp) => this.props.login(resp),
+        sessionsStore: (userObject) => this.props.userLogin(userObject),
+    }
+
+    auth.login(functionsObject,   configObject)
   
+    /*
     fetch("http://localhost:3000/sessions", configObject)
     .then(resp => resp.json())
     .then(resp => {
@@ -51,6 +67,7 @@ class Login extends Component {
     .catch(error =>{
         console.log("Login error", error)
     });  
+    */
     }
 
     handelOnChange = (e) => {
@@ -78,6 +95,8 @@ class Login extends Component {
         )
     }
 }
+
+
 
 
 

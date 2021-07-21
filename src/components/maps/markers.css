@@ -13,6 +13,11 @@
     background-repeat: no-repeat;
     background-size: 50px 50px;
   }
+  .spot-marker:hover{
+    width: 80px;
+    height: 80px;
+    background-size: 80px 80px;
+  }
 
   .Catch-marker{
     position: absolute;
@@ -51,13 +56,16 @@
 
   .marker-name-div{
     position: absolute;
-    color: greenyellow;
-    top: 50%;
-    left: 50%;
-    width: 73px;
+    color: black;
+   
+    text-align: center;
+    top: -22px;
+    left: 80px;
+    width: 100px;
     height: 33px;
-    background-color: rgba(24, 11, 145, 0.4);
-    border: 2px solid #fff;
+   /* background-color: rgba(24, 11, 145, 0.4);*/
+   background-color:rgb(255, 253, 253);
+    border: 1px solid black;
     border-radius: 5px;
     user-select: none;
     transform: translate(-50%, -50%);

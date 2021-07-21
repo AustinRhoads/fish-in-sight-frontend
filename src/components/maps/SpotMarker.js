@@ -18,7 +18,7 @@ class SpotMarker extends Component{
     }
    
     renderName = () => {
-        if(this.state.hover){
+        if(this.state.hover && !this.props.hideName){
             return markerName(this.props.name)
         }
     }

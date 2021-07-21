@@ -10,6 +10,9 @@ class Home extends Component {
       componentDidMount(){
         let auxnav = document.body.querySelector('div.aux-nav')
         auxnav.style.display = "none";
+  
+            
+        
 
       }
 

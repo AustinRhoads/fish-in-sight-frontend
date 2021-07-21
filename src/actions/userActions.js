@@ -46,8 +46,9 @@ export function checkLogin(){
                 .then(resp => resp.json())
                 .then(obj => {
                     
+         
                     dispatch({type: "SET_LOGIN_STATUS", user: obj})
-                   // return true;
+                   
                 });
                
                

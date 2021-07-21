@@ -53,11 +53,11 @@ export function Catches(props){
   
 const checkLogin = () => {
     
-    if(props.redirect){
-      
-        return <Redirect to="/" />
-     
-    }
+  //  if(props.redirect){
+  //    
+  //      return <Redirect to="/" />
+  //   
+  //  }
 
 }
 

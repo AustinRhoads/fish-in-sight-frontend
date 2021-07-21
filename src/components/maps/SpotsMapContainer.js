@@ -35,6 +35,13 @@ class SpotsMapContainer extends Component {
        
       }
 
+    //  login_check = () => {
+    //    if(this.props.redirect){
+    //        console.log("logged out")
+    //       this.props.history.push("/")
+    //    }
+    //}
+
 
 
       setMyLocation = () => {
@@ -90,7 +97,7 @@ class SpotsMapContainer extends Component {
 
       renderCatches = () => {
         if(this.props.catches){
-          console.log(this.props.catches)
+    //      console.log(this.props.catches)
           return this.props.catches.map(caught => <CatchMarker key={cuid()} caught={caught} color="green" lat={caught.lat} lng={caught.lng} />)
         }
       }
@@ -112,6 +119,7 @@ class SpotsMapContainer extends Component {
 
 
     render(){
+     // this.login_check()
         return(
             <div className="map-container" >
                
@@ -180,7 +188,7 @@ class SpotsMapContainer extends Component {
                         {this.renderSpots()}
                         {this.renderCatches()}
                         
-                        <SpotMarker id="new_spot" color="rgb(0,255,0,0.3)" lat={this.state.newSpotLat} lng={this.state.newSpotLng}/>
+                        <SpotMarker hideName={true} id="new_spot" color="rgb(0,255,0,0.3)" lat={this.state.newSpotLat} lng={this.state.newSpotLng}/>
 
 
                     </GoogleMapReact>

@@ -7,8 +7,9 @@ function NavBarContainer(props){
 
   const  logout = () => {
         
-       props.userLogout()
-        return false;
+       props.logout()
+     //  this.history.push("/")
+       // return false;
     }
 
   const  renderUser = () => {

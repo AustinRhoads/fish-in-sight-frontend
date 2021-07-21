@@ -13,10 +13,10 @@ class LoginContainer extends Component{
         auxnav.style.display = "none";
     }
 
-    handelSuccessfulAuth = (data) => { 
+    login = (data) => { 
          
-        this.props.handelLogin(data);
-        this.props.history.push(`/users/${data.id}`)
+        this.props.handleLogin(data);
+     //   this.props.history.push(`/users/${data.id}`)
     }
 
     setError = (error) => {
@@ -40,7 +40,7 @@ class LoginContainer extends Component{
                 
                
                 {this.renderErrors()}
-                <Login getCSRFToken={this.props.getCSRFToken} setError={this.setError} handelSuccessfulAuth={this.handelSuccessfulAuth} userLogin={this.props.userLogin} />
+                <Login {...this.props} getCSRFToken={this.props.getCSRFToken} setError={this.setError} login={this.login} userLogin={this.props.userLogin} />
                 <hr className="solid"></hr>
                 <p>Not a member? Sign up <a href="/register">here</a>.</p>
             </div>

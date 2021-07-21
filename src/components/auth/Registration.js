@@ -7,6 +7,7 @@ class Registration extends Component {
         password_confirmation: "",
         email: "",
         registrationErrors: "",
+        image: <img alt="test" src= "/home/austin/projects/fish-in-sight/fish-in-sight-frontend/src/wavyblankuserimg.png" />,
     }
 
 
@@ -20,6 +21,8 @@ class Registration extends Component {
             password_confirmation,
         } = this.state
 
+
+        
         const newUser = {
             user: {
             email: email,
@@ -28,6 +31,12 @@ class Registration extends Component {
             password_confirmation: password_confirmation,
             }
         }
+        
+
+     
+
+
+           
 
         const configObject = {
             method: "POST",
@@ -37,6 +46,7 @@ class Registration extends Component {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(newUser)
+           
         }
 
         fetch("http://localhost:3000/registrations", configObject)
@@ -87,7 +97,9 @@ class Registration extends Component {
                 <p style={{color: "red", fontSize: "10px"}}>passwords do not match.</p>
             )
         } else {
+           if( document.getElementById("pw_confirm")){
             document.getElementById("pw_confirm").style.border = "solid lightgreen 3px";
+           }
         }
 
     }

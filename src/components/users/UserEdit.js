@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+//import { checkLogin } from '/home/austin/projects/fish-in-sight/fish-in-sight-frontend/src/actions/userActions.js'
+
 
 class UserEdit extends Component{
 
@@ -15,14 +17,21 @@ class UserEdit extends Component{
     async componentDidMount(){
         const user = await fetch(`http://localhost:3000/api/v1/users/${this.props.match.params.id}`).then(resp => resp.json());
         
+        
         this.setState({
             user: user,
             email: user.email,
             username: user.username,
-            image_preview: user.image,
+           // image_preview: user.image.url,
             loaded: true,
 
         })
+        if(user.image){
+            this.setState({
+                image_preview: user.image.url,
+            })
+        }
+
     }
 
 
@@ -69,7 +78,7 @@ class UserEdit extends Component{
     
 
 
-    handleOnSubmit = (e) => {
+     handleOnSubmit = async (e) => {
         e.preventDefault()
 
         const formData = new FormData();
@@ -93,25 +102,15 @@ class UserEdit extends Component{
 
 
         
-        fetch(`http://localhost:3000/api/v1/users/${this.state.user.id}`, configObject)
+       await fetch(`http://localhost:3000/api/v1/users/${this.state.user.id}`, configObject)
         .then(resp => resp.json())
         .then(resp => {
             console.log("catches res", resp);
+            this.props.history.push(`/users/${this.state.user.id}`)
         }).catch(error =>{
             console.log("catches error", error)
         });
     
-        this.setState({
-         user: {},
-         email: "",
-         username: "",
-         image: "",
-         image_preview: "",
-         image_updated: false,
-         loaded: false,
-        })
-
-        this.props.history.push(`/users/${this.state.user.id}`)
 
 
 

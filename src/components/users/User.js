@@ -9,16 +9,20 @@ class User extends Component{
         user_id: this.props.match.params.id,
         is_fetched: false,
         user: {},
+
     }
    
 
   async componentDidMount(){
+ 
+        const user = await fetch(`http://localhost:3000/api/v1/users/${this.state.user_id}`).then(resp => resp.json())
+ 
+        await this.setState({user: user, is_fetched: true})
+        let auxnav = document.body.querySelector('div.aux-nav')   
+        auxnav.style.display = "block";
+      
      
-       const user = await fetch(`http://localhost:3000/api/v1/users/${this.state.user_id}`).then(resp => resp.json())
-      console.log(user)
-       this.setState({user: user, is_fetched: true})
-       let auxnav = document.body.querySelector('div.aux-nav')   
-       auxnav.style.display = "block";
+
    }
 
    renderEditLink = () => {
@@ -29,17 +33,19 @@ class User extends Component{
        }
    }
 
+
    renderUserImage = () => {
        if(this.state.user.image){
            return (
                <img className="user-page-image" alt="ui" src={this.state.user.image.url} style={{maxWidth: 101, maxHeight: 200}}/>
            )
-       }
+       } 
    }
 
     renderUserInfo = () => {
         if(this.state.is_fetched){
             return (
+                
                 <div className="user-componenet">
                     
                     <div className="user-home-info-box" style={{textAlign: "center"}}>

@@ -14,6 +14,15 @@ class SpotInput extends Component{
         lng: '',
     }
 
+
+
+login_check = () => {
+    if(this.props.redirect){
+        console.log("logged out")
+       this.props.history.push("/")
+    }
+}
+
     getCSRFToken = () => {
         return unescape(document.cookie.split('=')[1])
     }
@@ -57,8 +66,9 @@ class SpotInput extends Component{
         fetch('http://localhost:3000/api/v1/spots', configObject)
         .then(resp => resp.json())
         .then(obj => {
-            console.log("No spot update to local state ",obj)
+           // console.log("No spot update to local state ",obj)
            /* this.props.updateSpots(obj) */
+           this.props.history.push("/spots")
         })
         .catch(error => {console.log(error)})
         this.setState({
@@ -88,6 +98,7 @@ class SpotInput extends Component{
 
 
     render(){
+     //   this.login_check()
         return(
             <div className="new-spot-div">
                 <h2>New Spot</h2>

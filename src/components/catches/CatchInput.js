@@ -8,7 +8,7 @@ import GoogleMapReact from 'google-map-react';
 class CatchInput extends Component {
 
     state = {
-        user_id: "",
+        user_id: JSON.parse(localStorage.getItem('user')) || "",
         notes: "",
         species_id: "", 
         bait_id: "",
@@ -105,9 +105,9 @@ handleOnSubmit = (e) => {
 
 componentDidMount(){
 
-    this.setState({
-        user_id: this.props.uid,
-    })
+  //  this.setState({
+  //      user_id: this.props.uid,
+  //  })
 
     this.setMyLocation();
     
