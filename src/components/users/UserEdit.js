@@ -31,6 +31,10 @@ class UserEdit extends Component{
                 image_preview: user.image.url,
             })
         }
+        if(this.props.match.params.id !== JSON.parse(localStorage.getItem('user')).id){
+            this.props.history.goBack()
+        }
+        
 
     }
 

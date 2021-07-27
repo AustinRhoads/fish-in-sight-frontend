@@ -215,7 +215,7 @@ class App extends Component{
            
             
             <ProtectedRoute path={"/users/:id/edit"} uid={this.state.user.id} render={props=> <UserEdit {...props}   updateUser={this.updateUser} uid={this.state.uid} user={this.state.user} checkLoginStatus={this.checkLoginStatus} />} />
-            <ProtectedRoute path={`/users/:id`} render={props => <User {...props} redirect={this.state.redirect} currentUser={this.state.user} uid={this.state.user.id} />} />
+            <ProtectedRoute path={`/users/:id`} render={props => <User {...props} redirect={this.state.redirect} currentUser={this.state.user} uid={this.state.user.id} allUsers={this.props.allUsers} />} />
             <Route path="*" render={() => "404 page not found"} />
           </Switch>
           </BrowserRouter>
