@@ -53,7 +53,7 @@ class App extends Component{
 
 
   checkLoginStatus = () =>{
-    console.log(this.state.loggedInStatus)
+  
     
    if(this.state.user !== {}){
     axios.get('http://localhost:3000/logged_in', {withCredentials: true})
@@ -147,8 +147,8 @@ class App extends Component{
 
 
   async componentDidMount(){
-    var userz = JSON.parse(localStorage.getItem('user'));
-    console.log(userz)
+   
+   
     await this.checkLoginStatus();
     await this.props.getSpecies();
     await this.props.getSpots();

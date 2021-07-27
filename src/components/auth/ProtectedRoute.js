@@ -8,7 +8,7 @@ export const ProtectedRoute = ({render: Component, ...rest}) => {
     return(
         <Route {...rest} render={
             (props) =>{
-                console.log(localStorage.getItem('loggedInStatus'))
+               
                 if(localStorage.getItem('loggedInStatus') === "LOGGED_IN"){
                     
                     return <Component {...props} />;

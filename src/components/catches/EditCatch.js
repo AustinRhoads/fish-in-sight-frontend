@@ -109,8 +109,8 @@ handleOnSubmit = (e) => {
 }
 
 async componentDidMount(){
-    console.log(this.props)
-    var currentUser = JSON.parse(localStorage.getItem('user'))
+    
+    
 
    
     this.setState({
@@ -118,10 +118,8 @@ async componentDidMount(){
     })
     
     const caught = await fetch(`http://localhost:3000/api/v1/catches/${this.props.match.params.id}`).then(resp => resp.json())
-    
-    if(currentUser.catches && caught && !currentUser.catches.includes(caught)){
-       this.props.history.push(`/catches/${this.props.match.params.id}`);
-    }
+
+this.editProtect(caught)
 
     const date = caught.date.split("").splice(0, 10).join("")
     const time = caught.date.split("").slice(11, 16).join("")
@@ -153,6 +151,16 @@ async componentDidMount(){
     
    
 
+}
+
+editProtect = (caught) => {
+    var currentUser = JSON.parse(localStorage.getItem('user'))
+    var myCatch = currentUser.catches.find(c => c.id == caught.id)
+    
+    if( !myCatch){
+       
+    this.props.history.push(`/catches/${this.props.match.params.id}`);
+    }
 }
 
 setMyLocation = () => {
