@@ -22,7 +22,6 @@ class UserEdit extends Component{
             user: user,
             email: user.email,
             username: user.username,
-           // image_preview: user.image.url,
             loaded: true,
 
         })
@@ -31,11 +30,19 @@ class UserEdit extends Component{
                 image_preview: user.image.url,
             })
         }
-        if(this.props.match.params.id !== JSON.parse(localStorage.getItem('user')).id){
-            this.props.history.goBack()
-        }
-        
 
+        this.editProtect(user)       
+
+    }
+
+    editProtect = (user) => {
+
+       var currentUser = JSON.parse(localStorage.getItem('user'))
+
+        if(user.id !==  currentUser.id){
+            console.log(user.id,  currentUser.id)
+            this.props.history.push(`/users/${user.id}`)
+        }
     }
 
 

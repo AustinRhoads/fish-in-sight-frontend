@@ -110,12 +110,19 @@ handleOnSubmit = (e) => {
 
 async componentDidMount(){
     console.log(this.props)
+    var currentUser = JSON.parse(localStorage.getItem('user'))
+
+   
     this.setState({
         user_id: this.props.uid,
     })
     
     const caught = await fetch(`http://localhost:3000/api/v1/catches/${this.props.match.params.id}`).then(resp => resp.json())
     
+    if(currentUser.catches && caught && !currentUser.catches.includes(caught)){
+       this.props.history.push(`/catches/${this.props.match.params.id}`);
+    }
+
     const date = caught.date.split("").splice(0, 10).join("")
     const time = caught.date.split("").slice(11, 16).join("")
     
