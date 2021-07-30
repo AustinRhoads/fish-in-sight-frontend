@@ -22,7 +22,7 @@ async login(functionsObject, configObject){
          functionsObject.redirectPath(resp.user.id)
           
         } else {
-            this.props.setError(resp.error)
+            functionsObject.setError(resp.error)
             console.log(resp.error)
         }
     })

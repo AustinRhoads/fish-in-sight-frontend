@@ -69,7 +69,7 @@ class Registration extends Component {
 
 
         this.props.userLogin(newUser)
-      ///////HHHEEERRREEE!!!!!!!!!!!!!
+      
         
       
 

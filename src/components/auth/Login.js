@@ -47,6 +47,7 @@ class Login extends Component {
         redirectPath: (id) =>  { if(auth.isAuthenticated){this.props.history.push(`/users/${id}`)}},
         login: (resp) => this.props.login(resp),
         sessionsStore: (userObject) => this.props.userLogin(userObject),
+        setError: (error) => {this.props.setError(error)}
     }
 
     auth.login(functionsObject,   configObject)

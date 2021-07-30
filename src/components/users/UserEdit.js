@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-//import { checkLogin } from '/home/austin/projects/fish-in-sight/fish-in-sight-frontend/src/actions/userActions.js'
 
 
 class UserEdit extends Component{

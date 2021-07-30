@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import Home from './containers/Home.js'
 import {BrowserRouter, Switch, Route, Redirect} from 'react-router-dom'
-//import DashboardContainer from './containers/DashboardContainer.js'
 import './App.css'
 import axios from 'axios'
 import NavBarContainer from './containers/NavBarContainer'
@@ -16,11 +15,8 @@ import RegistrationContainer from './containers/RegistrationContainer.js'
 import UserCatches from './components/catches/UserCatches.js'
 import CatchInput from './components/catches/CatchInput.js'
 import Catch from './components/catches/Catch.js'
-//import Catches from './components/catches/Catches.js'
 import EditCatch from './components/catches/EditCatch.js'
-
 import FollowingCatches from './components/catches/FollowingCatches.js'
-
 import AuxNavBar from './containers/AuxNavBar.js'
 import User from './components/users/User.js'
 import UserEdit from './components/users/UserEdit.js'
@@ -39,7 +35,6 @@ class App extends Component{
 
   state = {
    loggedInStatus: localStorage.getItem('loggedInStatus') || "NOT_LOGGED_IN",
-   // loggedInStatus: "NOT_LOGGED_IN",
     user: JSON.parse(localStorage.getItem('user')) || {},
     redirect: false,
     userCatches: [],
@@ -107,7 +102,7 @@ class App extends Component{
 
   
   handleLogin = (data) => {
-   // console.log("login user", data)
+  
     this.getUserAndUserCatches(data.id);
     this.setState({
       loggedInStatus: "LOGGED_IN",
@@ -234,7 +229,7 @@ class App extends Component{
 const mapStateToProps = state => {
  
   return{
-   // loggedInStatus: state.userStatus.loggedInStatus,
+  
     user: state.userStatus.user,
     species: state.species.all_species,
     spots: state.spots.all_spots,
@@ -249,7 +244,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = (dispatch) => {
  
 return {
- // checklogin: () => dispatch(checkLogin()),
+ 
   userLogin: (user) => dispatch(userLogin(user)),
   userLogout: () => dispatch(userLogout()),
   userRegister: (newUser) => dispatch(userRegister(newUser)),
@@ -258,10 +253,10 @@ return {
   getSpots: () => dispatch(getSpots()),
   getAllUsers: () => dispatch(getAllUsers()), 
   getAllCatches: () => dispatch(getAllCatches()),
-  //getUserCatches: (uid) => dispatch(getUserCatches(uid))
+  
 }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps) (App);
 
-//<Route exact path={"/dashboard"} component={() => <DashboardContainer checklogin={this.props.checklogin} spots={this.props.spots} baits={this.props.baits} species={this.props.species}  user={this.props.user} loggedInStatus={this.props.loggedInStatus} /*catches={this.props.user.catches}*/ /> } />
+

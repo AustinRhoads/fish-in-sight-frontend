@@ -14,19 +14,25 @@ class LoginContainer extends Component{
     }
 
     login = (data) => { 
-         
+     
         this.props.handleLogin(data);
-     //   this.props.history.push(`/users/${data.id}`)
+
     }
 
     setError = (error) => {
+
         this.setState({loginErrors: error})
+
     }
 
     renderErrors = () =>{
+
          if(this.state.loginErrors){
+
              return <p className="error">{this.state.loginErrors}</p>
+             
          }
+
     }
 
    
