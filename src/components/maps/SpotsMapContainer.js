@@ -9,7 +9,7 @@ import SpotMarker from './SpotMarker';
 import CatchMarker from './CatchMarker'
 import cuid from 'cuid'
 
-//const AnyReactComponent = ({text}) => <div>{text}</div>;
+
 
 class SpotsMapContainer extends Component {
     
@@ -21,8 +21,7 @@ class SpotsMapContainer extends Component {
             lng: -98.40859740107271,
         },
         zoom: 11,
-       // spots: [],
-       // catches: [],
+
         newSpotLat: 0,
         newSpotLng: 0,
         key: "",
@@ -31,16 +30,8 @@ class SpotsMapContainer extends Component {
 
     componentDidMount(){
         this.setMyLocation()
-        console.log(this.props)
-       
+        
       }
-
-    //  login_check = () => {
-    //    if(this.props.redirect){
-    //        console.log("logged out")
-    //       this.props.history.push("/")
-    //    }
-    //}
 
 
 
@@ -108,7 +99,10 @@ class SpotsMapContainer extends Component {
             newSpotLat: lat,
             newSpotLng: lng,
         })
-        this.props.updateLatLngAddress(lat, lng, '')
+        if(this.props.updateLatLngAddress){
+          this.props.updateLatLngAddress(lat, lng, '')
+        }
+       
         this.setState({address: ''})
        
       }

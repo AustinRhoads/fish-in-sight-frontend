@@ -4,7 +4,7 @@ const getCSRFToken = () => {
     return unescape(document.cookie.split('=')[1])
 }
 
-export function newCatch (caught){
+export function createNewCatch (caught){
 
     return(dispatch) => {
 
@@ -15,15 +15,17 @@ export function newCatch (caught){
                 'X-CSRF-Token': getCSRFToken(),
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(caught)
+            body: caught
         }
 
-        fetch("http://localhost:3000/catches", configObject)
+        fetch("http://localhost:3000/api/v1/catches", configObject)
         .then(resp => resp.json())
         .then(resp => {
-            console.log("catches res", resp);
+            return resp
+            //console.log("catches res", resp);
         }).catch(error =>{
-            console.log("catches error", error)
+            return error
+           // console.log("catches error", error)
         });
     }
 

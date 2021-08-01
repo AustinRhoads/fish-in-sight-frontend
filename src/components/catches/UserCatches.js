@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { Redirect} from 'react-router-dom'
 import CatchBox from './CatchBox';
 import cuid from 'cuid'
 import FilterCatches from './FilterCatches.js'
@@ -51,15 +50,7 @@ export function Catches(props){
     }
 
   
-const checkLogin = () => {
-    
-  //  if(props.redirect){
-  //    
-  //      return <Redirect to="/" />
-  //   
-  //  }
 
-}
 
 const renderStats = () => {
     if(props.user && props.user.species && props.user.catches){
@@ -76,7 +67,6 @@ const renderStats = () => {
        
         return(    
           <>
-                {checkLogin()}
             
                 <div className="catches-list">
                     {renderStats()}

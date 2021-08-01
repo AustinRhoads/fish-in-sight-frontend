@@ -13,7 +13,7 @@ class RegistrationContainer extends Component{
     }
 
     handelSuccessfulAuth = (data) => {  
-        this.props.handelLogin(data);
+        this.props.handleLogin(data);
         this.props.history.push(`/users/${data.id}`)
     }
 
@@ -32,7 +32,7 @@ class RegistrationContainer extends Component{
         return(
             <div className="reg-container">
                 {this.renderErrors()}
-                <Registration setError={this.setError} getCSRFToken={this.props.getCSRFToken} handelSuccessfulAuth={this.handelSuccessfulAuth} userLogin={this.props.userLogin}/>
+                <Registration setError={this.setError} getCSRFToken={this.props.getCSRFToken} handelSuccessfulAuth={this.handelSuccessfulAuth} userLogin={this.props.userLogin} handleLogin={this.props.handleLogin} />
                 <hr className="solid"></hr>
                 <p>Already a member? Login <a href="/login">here</a>.</p>
             </div>

@@ -1,45 +1,58 @@
 
 import React, { Component } from 'react';
-import { connect } from "react-redux";
+//import { connect } from "react-redux";
 import UserCatches from '../catches/UserCatches';
 
 
 class User extends Component{
+
     state = {
-        user_id: this.props.match.params.id,
+        user_id: "",
         is_fetched: false,
         user: {},
 
     }
-   
+
 
   async componentDidMount(){
  
-        const user = await fetch(`http://localhost:3000/api/v1/users/${this.state.user_id}`).then(resp => resp.json())
+        const user = await fetch(`http://localhost:3000/api/v1/users/${this.props.match.params.id}`).then(resp => resp.json())
  
-        await this.setState({user: user, is_fetched: true})
+        await this.setState({user_id: this.props.match.params.id, user: user, is_fetched: true})
+
         let auxnav = document.body.querySelector('div.aux-nav')   
+        
         auxnav.style.display = "block";
       
      
 
    }
 
+   
+
    renderEditLink = () => {
-       if(this.props.uid === this.state.user.id){
+
+       var currentUser = JSON.parse(localStorage.getItem('user'))
+    
+       if(currentUser.id === parseInt(this.props.match.params.id)){
+
            return(
+
                <a href={`/users/${this.props.uid}/edit`}>Edit Detials</a>
+               
            )
        }
    }
 
 
    renderUserImage = () => {
+
        if(this.state.user.image){
            return (
                <img className="user-page-image" alt="ui" src={this.state.user.image.url} style={{maxWidth: 101, maxHeight: 200}}/>
            )
-       } 
+       }
+
    }
 
     renderUserInfo = () => {
@@ -91,11 +104,11 @@ class User extends Component{
 
 }
 
-
+/*
 const mapStateToProps = (state) => {
     return{
         allUsers: state.userStatus.allUsers,
     }
 }
-
-export default connect(mapStateToProps)(User);
+*/
+export default /*connect(mapStateToProps)(*/User/*)*/;

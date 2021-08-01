@@ -445,8 +445,8 @@ hr.solid {
   .catch-img-preview{
     
 
-    max-width:100%;
-    max-height: 100%;
+    max-width:340px;
+    max-height: 330px;
     margin-right: auto;
     margin-left: auto;
     margin-top: auto;
@@ -460,6 +460,16 @@ hr.solid {
   .image-preview-delete-button:hover {
     cursor: pointer;
     display: block;
+  }
+
+  #species-search-ul{
+    max-height: 270px;
+    overflow: auto;
+    list-style: none;
+  }
+
+  .species-seacrh-li{
+
   }
   
   
@@ -479,6 +489,8 @@ hr.solid {
 .ncsab-species{
 
 }
+
+
 
 
 

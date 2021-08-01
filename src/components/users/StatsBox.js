@@ -13,9 +13,7 @@ function StatsBox (props){
             <div className="stat-box">SPECIES: {props.speciesCount} </div>
             </>
            )
-        } else {
-            console.log("tofu")
-        }
+        } 
     }
     
         

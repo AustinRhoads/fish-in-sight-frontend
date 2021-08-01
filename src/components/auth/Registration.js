@@ -1,17 +1,21 @@
 import React, { Component } from 'react'
 
 class Registration extends Component {
+
     state = {
+
         username: "",
         password: "",
         password_confirmation: "",
         email: "",
         registrationErrors: "",
         image: <img alt="test" src= "/home/austin/projects/fish-in-sight/fish-in-sight-frontend/src/wavyblankuserimg.png" />,
+
     }
 
 
     handelOnSubmit = e => {
+
         e.preventDefault()
 
         const {
@@ -24,12 +28,14 @@ class Registration extends Component {
 
         
         const newUser = {
+
             user: {
             email: email,
             username: username,
             password: password,
             password_confirmation: password_confirmation,
             }
+
         }
         
 
@@ -39,30 +45,41 @@ class Registration extends Component {
            
 
         const configObject = {
+
             method: "POST",
+
             credentials: 'include',
+
             headers: {
                 'X-CSRF-Token': this.props.getCSRFToken(),
                 'Content-Type': 'application/json'
             },
+
             body: JSON.stringify(newUser)
            
         }
 
+
+
+
         fetch("http://localhost:3000/registrations", configObject)
         .then(resp => resp.json())
         .then(resp => {
-            console.log(resp)
+
+          
             if(resp.status === "created"){
-                console.log(resp)
+
                 this.props.handelSuccessfulAuth(resp.user)
-              //  this.props.userLogin(resp.user)
+              
             } else if(resp.status === 500) {
+
                 this.props.setError(resp.error)
+
             }
-            console.log("registration res", resp);
+
+           
         }).catch(error =>{
-            console.log("registration error", error);
+           console.log(error)
             this.props.setError(error);
         });
 

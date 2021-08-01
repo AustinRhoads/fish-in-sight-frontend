@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import Home from './containers/Home.js'
 import {BrowserRouter, Switch, Route, Redirect} from 'react-router-dom'
 import './App.css'
@@ -24,14 +24,14 @@ import SpotInput from './components/spots/SpotInput.js'
 import SpotsMapContainer from './components/maps/SpotsMapContainer.js'
 
 import { ProtectedRoute } from './components/auth/ProtectedRoute.js'
+import SPECIESDATA from '/home/austin/projects/fish-in-sight/fish-in-sight-frontend/src/MEGADATA_SPECIES.json'
 
 
 
 
 
 
-
-class App extends Component{
+class App extends PureComponent{
 
   state = {
    loggedInStatus: localStorage.getItem('loggedInStatus') || "NOT_LOGGED_IN",
@@ -39,7 +39,9 @@ class App extends Component{
     redirect: false,
     userCatches: [],
     allUser: [],
-    blah: "blah",
+    all_species: [],
+
+    
     
   }
 
@@ -145,11 +147,15 @@ class App extends Component{
    
    
     await this.checkLoginStatus();
-    await this.props.getSpecies();
     await this.props.getSpots();
     await this.props.getBaits();
     await this.props.getAllUsers();
     await this.props.getAllCatches();
+    
+    if(this.props.species !== this.state.all_species){
+      this.setState({all_species: this.props.species})
+    }
+    
    }
 
 
@@ -176,7 +182,7 @@ class App extends Component{
 
 
   render(){
-  
+ 
     return (
       <div className="App">
         
@@ -190,27 +196,27 @@ class App extends Component{
                <Home {...props} handelLogin={this.handelLogin}  loggedInStatus={this.state.loggedInStatus} userLogin={this.props.userLogin}  getCSRFToken={this.getCSRFToken} />
             )}  />
 
-            <Route exact path="/login" render={props => <LoginContainer {...props} redirect={this.state.redirect} getCSRFToken={this.getCSRFToken} handleLogin={this.handleLogin} userLogin={this.props.userLogin} />}/>
-            <Route exact path="/register" render={props => <RegistrationContainer {...props} redirect={this.state.redirect} getCSRFToken={this.getCSRFToken} userLogin={this.props.userLogin} handelLogin={this.handelLogin} />}/>
+            <Route exact path="/login" render={props => <LoginContainer {...props} getCSRFToken={this.getCSRFToken} handleLogin={this.handleLogin} userLogin={this.props.userLogin} />}/>
+            <Route exact path="/register" render={props => <RegistrationContainer {...props} getCSRFToken={this.getCSRFToken} userLogin={this.props.userLogin} handleLogin={this.handleLogin} />}/>
             
-            <ProtectedRoute exact path="/spots/new" render={props => <SpotInput {...props} redirect={this.state.redirect} uid = {this.state.user.id} spots={this.props.spots} allCatches={this.props.allCatches} /> } />
-            <ProtectedRoute exact path="/spots" render={props => <SpotsMapContainer {...props} redirect={this.state.redirect} uid = {this.state.user.uid} catches={this.props.allCatches}  spots={this.props.spots} /* updateLatLngAddress={this.updateLatLngAddress}*/ /> } />
+            <ProtectedRoute exact path="/spots/new" render={props => <SpotInput {...props} spots={this.props.spots} getSpots={this.props.getSpots} allCatches={this.props.allCatches} /> } />
+            <ProtectedRoute exact path="/spots" render={props => <SpotsMapContainer {...props} catches={this.props.allCatches}  spots={this.props.spots} /* updateLatLngAddress={this.updateLatLngAddress}*/ /> } />
             
 
             
-            <ProtectedRoute  path={"/catches/:id/edit"} render={props => <EditCatch {...props} redirectToHome={this.redirectToHome}  redirect={this.state.redirect} uid={this.state.user.id} species={this.props.species} baits={this.props.baits} spots={this.props.spots} />}  />
-            <ProtectedRoute exact path={"/catches/new"} render={props => <CatchInput {...props} redirect={this.state.redirect} uid={this.state.user.id} species={this.props.species}  baits={this.props.baits} spots={this.props.spots}  />}/>
-            <ProtectedRoute export path={"/catches/:id"} render={props => <Catch {...props} redirect={this.state.redirect} uid={this.state.user.id} />} />
+            <ProtectedRoute  path={"/catches/:id/edit"} render={props => <EditCatch {...props} redirectToHome={this.redirectToHome}  uid={this.state.user.id} species={this.props.species} baits={this.props.baits} spots={this.props.spots} />}  />
+            <ProtectedRoute exact path={"/catches/new"} render={props => <CatchInput {...props} uid={this.state.user.id} species={this.props.species}  baits={this.props.baits} spots={this.props.spots} getUserAndUserCatches={this.getUserAndUserCatches}  />}/>
+            <ProtectedRoute export path={"/catches/:id"} render={props => <Catch {...props} uid={this.state.user.id} />} />
         
-            <ProtectedRoute path={"/catches"} render={props => <FollowingCatches {...props}  redirect={this.state.redirect} uid={this.state.user.id} catches={this.props.allCatches}  />} />
+            <ProtectedRoute path={"/catches"} render={props => <FollowingCatches {...props}  uid={this.state.user.id} catches={this.props.allCatches}  />} />
 
-            <ProtectedRoute path={"/following/catches"} render={props => <FollowingCatches {...props}  redirect={this.state.redirect} uid={this.state.user.id} catches={this.props.allCatches}  />} />
+            <ProtectedRoute path={"/following/catches"} render={props => <FollowingCatches {...props}  uid={this.state.user.id} catches={this.props.allCatches}  />} />
 
-            <ProtectedRoute exact path={"/mycatches"} render={props => <UserCatches {...props}  redirect={this.state.redirect}  user={this.state.user} uid = {this.state.user.id} catches={this.state.userCatches}    /> } />
+            <ProtectedRoute exact path={"/mycatches"} render={props => <UserCatches {...props}   user={this.state.user} uid = {this.state.user.id} catches={this.state.userCatches}    /> } />
            
             
             <ProtectedRoute path={"/users/:id/edit"} uid={this.state.user.id} render={props=> <UserEdit {...props}   updateUser={this.updateUser} uid={this.state.uid} user={this.state.user} checkLoginStatus={this.checkLoginStatus} />} />
-            <ProtectedRoute path={`/users/:id`} render={props => <User {...props} redirect={this.state.redirect} currentUser={this.state.user} uid={this.state.user.id} allUsers={this.props.allUsers} />} />
+            <ProtectedRoute path={`/users/:id`} render={props => <User {...props} currentUser={this.state.user} uid={this.state.user.id} allUsers={this.props.allUsers} />} />
             <Route path="*" render={() => "404 page not found"} />
           </Switch>
           </BrowserRouter>
@@ -231,7 +237,7 @@ const mapStateToProps = state => {
   return{
   
     user: state.userStatus.user,
-    species: state.species.all_species,
+    species: SPECIESDATA,
     spots: state.spots.all_spots,
     baits: state.baits.all_baits,
     allUsers: state.userStatus.allUsers,
@@ -243,18 +249,18 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch) => {
  
-return {
- 
-  userLogin: (user) => dispatch(userLogin(user)),
-  userLogout: () => dispatch(userLogout()),
-  userRegister: (newUser) => dispatch(userRegister(newUser)),
-  getSpecies: () =>  dispatch(getSpecies()),
-  getBaits: () => dispatch(getBaits()),
-  getSpots: () => dispatch(getSpots()),
-  getAllUsers: () => dispatch(getAllUsers()), 
-  getAllCatches: () => dispatch(getAllCatches()),
+  return {
   
-}
+      userLogin: (user) => dispatch(userLogin(user)),
+      userLogout: () => dispatch(userLogout()),
+      userRegister: (newUser) => dispatch(userRegister(newUser)),
+      getSpecies: () =>  dispatch(getSpecies()),
+      getBaits: () => dispatch(getBaits()),
+      getSpots: () => dispatch(getSpots()),
+      getAllUsers: () => dispatch(getAllUsers()), 
+      getAllCatches: () => dispatch(getAllCatches()),
+
+  }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps) (App);

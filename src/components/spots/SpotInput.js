@@ -15,12 +15,7 @@ class SpotInput extends Component{
 
 
 
-login_check = () => {
-    if(this.props.redirect){
-        console.log("logged out")
-       this.props.history.push("/")
-    }
-}
+
 
     getCSRFToken = () => {
         return unescape(document.cookie.split('=')[1])
@@ -65,7 +60,8 @@ login_check = () => {
         fetch('http://localhost:3000/api/v1/spots', configObject)
         .then(resp => resp.json())
         .then(obj => {
-           this.props.history.push("/spots")
+           this.props.getSpots()
+           this.props.history.push("/spots/new")
         })
         .catch(error => {console.log(error)})
         this.setState({
@@ -107,7 +103,7 @@ login_check = () => {
                     </div>
                     <br />
 
-                    <SpotsMapContainer uid = {this.props.uid} catches={this.props.allCatches}  spots={this.props.spots} updateLatLngAddress={this.updateLatLngAddress} />
+                    <SpotsMapContainer  catches={this.props.allCatches}  spots={this.props.spots} updateLatLngAddress={this.updateLatLngAddress} />
                     
                 </form>
                 <footer style={{height: 180}}></footer>

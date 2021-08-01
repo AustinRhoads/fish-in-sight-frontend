@@ -14,6 +14,7 @@ class Catch extends Component{
     async componentDidMount(){
         const caught = await fetch(`http://localhost:3000/api/v1/catches/${this.props.match.params.id}`).then(resp => resp.json())
         this.setState({caught: caught,  is_fetched: true})
+        console.log(caught)
        
     }
 

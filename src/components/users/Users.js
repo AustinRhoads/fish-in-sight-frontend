@@ -8,6 +8,7 @@ class Users extends Component{
     }
 
     async componentDidMount(){
+        
         const users = await fetch("http://localhost:3000/api/v1/users").then(resp => resp.json())
         this.setState({users: users})
     }

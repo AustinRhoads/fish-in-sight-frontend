@@ -1,8 +1,8 @@
 import cuid from 'cuid';
 import React, { Component } from 'react';
-import { connect } from 'react-redux'
 import EXIF from 'exif-js';
 import GoogleMapReact from 'google-map-react';
+
 
 
 class CatchInput extends Component {
@@ -11,6 +11,7 @@ class CatchInput extends Component {
         user_id: JSON.parse(localStorage.getItem('user')) || "",
         notes: "",
         species_id: "", 
+        searchTerm: "",
         bait_id: "",
         spot_id: "",
         image: null,
@@ -58,7 +59,8 @@ handleOnSubmit = (e) => {
    formData.append('lat', this.state.center.lat)
    formData.append('lng', this.state.center.lng)
     
-
+ 
+   
    const configObject = {
     method: "POST",
     credentials: 'include',
@@ -74,6 +76,7 @@ handleOnSubmit = (e) => {
    .then(resp => resp.json())
    .then(resp => {
        console.log("catches res", resp);
+     
        this.props.history.push(`/catches/${resp.id}`)
    }).catch(error =>{
        console.log("catches error", error)
@@ -99,19 +102,15 @@ handleOnSubmit = (e) => {
     zoom: 11,
     key: "",
    })
+   
 
 
 }
 
 componentDidMount(){
 
-  //  this.setState({
-  //      user_id: this.props.uid,
-  //  })
-
     this.setMyLocation();
-    
-   
+  
 
 }
 
@@ -134,14 +133,44 @@ setMyLocation = () => {
       }
   }
 
+  renderSearchResultsList = () => {
+    
+        if(this.state.searchTerm !== ""){
+           return (
+                <ul id="species-search-ul">
+                    {
+                        this.props.species.filter(spec => {
 
+                            if(spec.name.toLowerCase().includes(this.state.searchTerm.toLowerCase())){
+                            
+                             return spec
+                            }
 
+                        }).map(spec => {
 
-renderSpeciesOptions = () => {
+                          return  <li className="species-search-li" key={cuid()} onClick={e => this.specsSelecter(e)} value={spec.id}>{spec.name}</li>
 
-    return this.props.species.map(spec => <option key={cuid()} value = {spec.id}>{spec.name}</option>)
+                        })
+                    }
+                </ul>
+           )
+        }
+        
+    
 
-}
+  }
+
+  specsSelecter = (e) => {
+    console.log(e.target.textContent)
+    this.setState({species_id: e.target.value, searchTerm: e.target.textContent})
+  }
+
+//
+//renderSpeciesOptions = () => {
+//    
+//    return this.props.species.map(spec => <option key={cuid()} value = {spec.id}>{spec.name}</option>)
+//
+//}
 
 renderBaitsOptions = () => {
 
@@ -177,13 +206,13 @@ exifExtractor = (file) => {
     reader.onload = function(e) {
 
       var exif = EXIF.readFromBinaryFile(this.result);
-      console.log(exif)
+     
       if(exif.DateTime){
         var  datetime = String(exif.DateTime).split(" ")
         var date = datetime[0].replace(/:/g, "-")
         var time = datetime[1]
         scope.setState({date: date, time: time})
-          console.log(datetime);
+       
       }
 
         
@@ -305,8 +334,15 @@ handleMapChange = (center, zoom, bounds, marginBounds) => {
         return(
         <div>
             <form className="scrollable-catch-input" onSubmit={ e => this.handleOnSubmit(e)}>
-            <div className= "outer-box">   
+
+            <div className= "outer-box">  
+
+
                 <div id="hsdci" className="catch-input-horizontal-scroll">
+
+
+
+
                     <div id="slide1" className="input-box-horizontal-scroll"> 
 
                         <h3 className="slide-title">Select Image</h3>
@@ -323,61 +359,81 @@ handleMapChange = (center, zoom, bounds, marginBounds) => {
 
                     </div>
 
+
+
+
                     <div id="slide2" className="input-box-horizontal-scroll">
 
-                    <h3 className="slide-title">Confirm the time and date of your catch.</h3>
+                        <h3 className="slide-title">Confirm the time and date of your catch.</h3>
                   
                   
-                <input required type="date" name="date" id="date-input" style={{display: ""}} onChange={(e) => this.handleOnChange(e)} value={this.state.date} />
-                <input type="time" name="time" onChange={e => this.handleOnChange(e)} value={this.state.time} />
+                        <input required type="date" name="date" id="date-input" style={{display: ""}} onChange={(e) => this.handleOnChange(e)} value={this.state.date} />
+                        
+                        <input type="time" name="time" onChange={e => this.handleOnChange(e)} value={this.state.time} />
+                        
                         <a className="back-button" href="#slide1">Back</a>
+                        
                         <a className="next-button" href="#slide3">next</a>
 
                     </div>
+
+
                     <div id="slide3" className="input-box-horizontal-scroll">
 
-                    <h3 className="slide-title">Location</h3>
+                        <h3 className="slide-title">Location</h3>
 
-            <p className="lat-lng">Lat: {this.state.center.lat} Lng: {this.state.center.lng}</p>
-                <div className="catch-map">
-                    <div className="center-marker"></div>
-                 <GoogleMapReact
-                    className="react-map"
-                    bootstrapURLKeys={{key: "AIzaSyDRKWLt8ylJe2kVLSnueiWtspn10ngk6iQ"}}
-                    defaultCenter={{ lat: 30.807042990766117, 
-                        lng: -98.40859740107271,}}
-                    defaultZoom={this.state.zoom}
-                    center={this.state.center}
-                   onChange={({ center, zoom, bounds, marginBounds }) => {
-                       this.handleMapChange(center, zoom, bounds, marginBounds);
-                     
-                  }}
-                    key={this.state.key}
-                    >
+                        <p className="lat-lng">Lat: {this.state.center.lat} Lng: {this.state.center.lng}</p>
+
+                        <div className="catch-map">
+                            <div className="center-marker"></div>
+                                <GoogleMapReact
+                                    className="react-map"
+                                    bootstrapURLKeys={{key: "AIzaSyDRKWLt8ylJe2kVLSnueiWtspn10ngk6iQ"}}
+                                    defaultCenter={{ lat: 30.807042990766117, 
+                                        lng: -98.40859740107271,}}
+                                    defaultZoom={this.state.zoom}
+                                    center={this.state.center}
+                                    onChange={({ center, zoom, bounds, marginBounds }) => {
+                                       this.handleMapChange(center, zoom, bounds, marginBounds);
+                                    
+                                    }}
+                                    key={this.state.key}
+                                    >
                         
 
 
-                    </GoogleMapReact>
-                    </div>
+                                </GoogleMapReact>
+
+                        </div>
+
                         <a className="back-button" href="#slide2">Back</a>
                         <a className="next-button" href="#slide4">Next</a>
 
                     </div>
+
                     <div id="slide4" className="input-box-horizontal-scroll">
 
-                    <h3 className="slide-title">Species</h3>
-                    <select name="species_id" value={this.state.species_id} onChange={(e) => this.handleOnChange(e)} placeholder="choose a species">
-                   
-                   <option disabled value=""> -- select a species -- </option>
-                   {this.renderSpeciesOptions()}
-               </select>
+                        <h3 className="slide-title">Species</h3>
+
+
+
+                        <input type="text" name="searchTerm" value={this.state.searchTerm} onChange={(e) => this.handleOnChange(e)} placeholder="Search..." autoComplete="off"></input>
+
+                        <div>
+                            {this.renderSearchResultsList()}
+                        </div>
+
                         <a className="back-button" href="#slide3">Back</a>
                         <a className="next-button" href="#slide5">next</a>
 
                     </div>
+
+
+
+
                     <div id="slide5" className="input-box-horizontal-scroll">
 
-                    <h3 className="slide-title">Add Measurements</h3>
+                        <h3 className="slide-title">Add Measurements</h3>
                         
                         <label>Inches: </label>
                         <input type="number" name="inches" onChange={e => this.handleOnChange(e)} value={this.state.inches}/>
@@ -386,35 +442,47 @@ handleMapChange = (center, zoom, bounds, marginBounds) => {
                         <a className="next-button" href="#slide6">next</a>
 
                     </div>
+
+
+
                     <div id="slide6" className="input-box-horizontal-scroll">
 
-                    <h3 className="slide-title">Bait</h3>
+                        <h3 className="slide-title">Bait</h3>
 
-                    <select name="bait_id" value={this.state.bait_id} onChange={(e) => this.handleOnChange(e)} placeholder="choose bait">
+                        <select name="bait_id" value={this.state.bait_id} onChange={(e) => this.handleOnChange(e)} placeholder="choose bait">
                     
-                    <option disabled value=""> -- which bait did you use -- </option>
-                        {this.renderBaitsOptions()}
-                    </select>
+                        <option disabled value=""> -- which bait did you use -- </option>
+                            {this.renderBaitsOptions()}
+                        </select>
+
                         <a className="back-button" href="#slide5">Back</a>
                         <a className="next-button" href="#slide7">next</a>
 
                     </div>
+
+
+
                     <div id="slide7" className="input-box-horizontal-scroll">
-                    <h3 className="slide-title">Description</h3>
-                    <div>
-                        <textarea className="catch-input-description" name="notes" value={this.state.notes} onChange={(e) => this.handleOnChange(e)} />
-                    </div>    
-                        <a className="back-button" href="#slide6">Back</a>
-                        <a className="next-button" href="#slide8">next</a>
+                        <h3 className="slide-title">Description</h3>
+                        <div>
+                            <textarea className="catch-input-description" name="notes" value={this.state.notes} onChange={(e) => this.handleOnChange(e)} />
+                        </div>    
+                            <a className="back-button" href="#slide6">Back</a>
+                            <a className="next-button" href="#slide8">next</a>
 
                     </div>
 
+
+
                     <div id="slide8" className="input-box-horizontal-scroll">
-                    <h3 className="slide-title">Review</h3>
+
+                        <h3 className="slide-title">Review</h3>
+
                         <div className="image-preview-div" style={{height: 220, width: 220}} >
                              {this.renderImagePreview()}
                              <br />
                         </div>
+
                         <div>
                             <h3>{this.selectedSpeciesName() }</h3>
                             <h4>Lat: {this.state.center.lat}, Lng: {this.state.center.lng}</h4>
@@ -454,14 +522,8 @@ handleMapChange = (center, zoom, bounds, marginBounds) => {
 
 
 
-const mapStateToProps = state => {
-    
-    return {
-        //species: state.species.all_species,
-       // baits: state.baits.all_baits,
-        spots: state.spots.all_spots,
-    }
-}
 
 
-export default connect(mapStateToProps) (CatchInput);
+
+
+export default CatchInput;
